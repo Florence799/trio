@@ -1,1 +1,1 @@
-require("../backend/src/index");
+require("../backend/index");
