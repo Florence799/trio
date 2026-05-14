@@ -12,6 +12,7 @@ const User = require('../models/User');
 const Course = require('../models/Course');
 const Material = require('../models/Material');
 const Quiz = require('../models/Quiz');
+const Assignment = require('../models/Assignment');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const MINIMAL_PDF_B64 =
@@ -123,6 +124,76 @@ const JAVA_OOP_QUIZ_QUESTIONS = [
     options: ['extends', 'implements', 'inherits', 'with'],
     correctAnswer: 'implements',
   },
+  {
+    questionText: 'Which class is the superclass of all classes in Java?',
+    options: ['Object', 'Class', 'Main', 'System'],
+    correctAnswer: 'Object',
+  },
+  {
+    questionText: 'Can we overload a static method in Java?',
+    options: ['Yes', 'No', 'Only in abstract classes', 'Only in interfaces'],
+    correctAnswer: 'Yes',
+  },
+  {
+    questionText: 'Which keyword is used to prevent a method from being overridden?',
+    options: ['static', 'final', 'private', 'sealed'],
+    correctAnswer: 'final',
+  },
+  {
+    questionText: 'What is the default value of a boolean variable in a Java class?',
+    options: ['true', 'false', 'null', '0'],
+    correctAnswer: 'false',
+  },
+  {
+    questionText: 'Which operator is used to allocate memory to an object in Java?',
+    options: ['malloc', 'alloc', 'new', 'create'],
+    correctAnswer: 'new',
+  },
+  {
+    questionText: 'What happens if a class defines a custom constructor but no default (no-args) constructor?',
+    options: ['The compiler generates a default one', 'You cannot instantiate the class without arguments', 'It throws a runtime error', 'The class cannot be compiled'],
+    correctAnswer: 'You cannot instantiate the class without arguments',
+  },
+  {
+    questionText: 'Which access modifier allows access within the same package and subclasses?',
+    options: ['public', 'private', 'protected', 'default'],
+    correctAnswer: 'protected',
+  },
+  {
+    questionText: 'Does Java support multiple inheritance of classes?',
+    options: ['Yes', 'No', 'Yes, but only abstract classes', 'Yes, using the multiple keyword'],
+    correctAnswer: 'No',
+  },
+  {
+    questionText: 'What does the "super" keyword invoke if used as a method (e.g., super())?',
+    options: ['Superclass constructor', 'Superclass overridden method', 'Current class constructor', 'Static block'],
+    correctAnswer: 'Superclass constructor',
+  },
+  {
+    questionText: 'Which concept describes the ability of an object to take on many forms?',
+    options: ['Polymorphism', 'Encapsulation', 'Abstraction', 'Inheritance'],
+    correctAnswer: 'Polymorphism',
+  },
+  {
+    questionText: 'An interface in Java can contain:',
+    options: ['Only abstract methods (before Java 8)', 'Instance variables', 'Constructors', 'Private inner classes (before Java 9)'],
+    correctAnswer: 'Only abstract methods (before Java 8)',
+  },
+  {
+    questionText: 'What is method overloading?',
+    options: ['Methods with the same name but different parameters', 'Methods with the same name in a subclass', 'Methods with different names but same parameters', 'Overriding a method multiple times'],
+    correctAnswer: 'Methods with the same name but different parameters',
+  },
+  {
+    questionText: 'Can an abstract class have a constructor?',
+    options: ['Yes', 'No', 'Only if it has no abstract methods', 'Only if it is public'],
+    correctAnswer: 'Yes',
+  },
+  {
+    questionText: 'Which of the following is true about "this" keyword?',
+    options: ['It refers to the current object instance', 'It refers to the superclass instance', 'It is used to call a static method', 'It refers to the main method'],
+    correctAnswer: 'It refers to the current object instance',
+  }
 ];
 
 async function seed() {
@@ -206,6 +277,22 @@ async function seed() {
       console.log(`Created quiz "${quizTitle}" with ${JAVA_OOP_QUIZ_QUESTIONS.length} questions`);
     } else {
       console.log('Quiz already exists, skipping');
+    }
+
+    // Seed Assignment
+    const assignmentTitle = 'Java Assignment 1: Design a Banking System';
+    let assignment = await Assignment.findOne({ course: course._id, title: assignmentTitle });
+    if (!assignment) {
+      assignment = new Assignment({
+        title: assignmentTitle,
+        instructions: 'Design a simple Banking System in Java using OOP concepts. Create a BankAccount superclass and SavingsAccount/CheckingAccount subclasses. Implement Encapsulation for the balance, Inheritance for the account types, and Polymorphism for the calculateInterest() method. Submit your zipped Java project or source code file.',
+        deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Due in 7 days
+        course: course._id,
+      });
+      await assignment.save();
+      console.log(`Created assignment: "${assignmentTitle}"`);
+    } else {
+      console.log('Assignment already exists, skipping');
     }
 
     console.log('\nDone. Login as Meghana: meghana.faculty@lms.com / Meghana@123');
