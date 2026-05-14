@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const {
   createCourse,
   getCourses,
@@ -15,6 +16,9 @@ const router = express.Router();
 function materialFileUpload(req, res, next) {
   upload.single('file')(req, res, (err) => {
     if (err) {
+      if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(413).send({ error: 'File is too large (max 50 MB).' });
+      }
       return res.status(400).send({ error: err.message || 'File upload failed.' });
     }
     next();

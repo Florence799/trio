@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Feedback = require('../models/Feedback');
 const Course = require('../models/Course');
 
@@ -25,6 +26,9 @@ exports.submitFeedback = async (req, res) => {
 exports.getTeacherFeedback = async (req, res) => {
   try {
     const teacherId = req.params.teacherId;
+    if (!mongoose.Types.ObjectId.isValid(teacherId)) {
+      return res.status(200).json([]);
+    }
     const feedbacks = await Feedback.find({ teacher: teacherId })
       .populate('student', 'name email')
       .populate('course', 'courseName');

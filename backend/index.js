@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
@@ -56,7 +58,7 @@ app.use(
   })
 );
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Public read-only stats (no auth)
 app.use('/api/public', require('./routes/publicRoutes'));
@@ -90,6 +92,10 @@ async function start() {
       family: 4,
     });
     console.log('MongoDB connected');
+    const uploadsDir = path.join(process.cwd(), 'uploads');
+    fs.mkdirSync(uploadsDir, { recursive: true });
+    console.log('Uploads directory ready');
+
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });

@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const fs = require('fs').promises;
 const path = require('path');
 const Course = require('../models/Course');
@@ -56,11 +57,18 @@ const uploadMaterial = async (req, res) => {
     if (!title || !type || !courseId) {
       return res.status(400).send({ error: 'Title, type, and course are required.' });
     }
+    if (!mongoose.Types.ObjectId.isValid(courseId)) {
+      return res.status(400).send({ error: 'Invalid course id.' });
+    }
     const course = await Course.findById(courseId);
     if (!course) {
       return res.status(404).send({ error: 'Course not found.' });
     }
-    const isOwner = course.teacher.toString() === req.user.id.toString();
+    const teacherRef = course.teacher != null ? course.teacher.toString() : null;
+    if (!teacherRef) {
+      return res.status(400).send({ error: 'Course has no teacher assigned; cannot upload materials.' });
+    }
+    const isOwner = teacherRef === req.user.id.toString();
     if (req.user.role !== 'Admin' && !isOwner) {
       return res.status(403).send({ error: 'You can only upload materials to your own courses.' });
     }
@@ -79,7 +87,11 @@ const uploadMaterial = async (req, res) => {
 
 const getCourseMaterials = async (req, res) => {
   try {
-    const materials = await Material.find({ course: req.params.courseId }).sort({ createdAt: -1 });
+    const { courseId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(courseId)) {
+      return res.send([]);
+    }
+    const materials = await Material.find({ course: courseId }).sort({ createdAt: -1 });
     res.send(materials);
   } catch (error) {
     res.status(500).send({ error: error.message });
@@ -94,7 +106,8 @@ const deleteMaterial = async (req, res) => {
     const course = await Course.findById(material.course);
     if (!course) return res.status(404).send({ error: 'Course not found' });
 
-    const isOwner = course.teacher.toString() === req.user.id.toString();
+    const teacherRef = course.teacher != null ? course.teacher.toString() : null;
+    const isOwner = teacherRef && teacherRef === req.user.id.toString();
     if (req.user.role !== 'Admin' && !isOwner) {
       return res.status(403).send({ error: 'Access denied.' });
     }
