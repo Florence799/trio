@@ -60,11 +60,32 @@ app.get('/', (req, res) => {
   res.send('LMS Backend API is running...');
 });
 
-// Database Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/lms')
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log('MongoDB Connection Error:', err));
+const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/lms';
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+if (process.env.NODE_ENV === 'production' && !process.env.MONGODB_URI) {
+  console.error('FATAL: MONGODB_URI must be set in production (Render → Environment).');
+  process.exit(1);
+}
+
+// Fail fast instead of buffering operations for 10s when disconnected
+mongoose.set('bufferCommands', false);
+
+async function start() {
+  try {
+    await mongoose.connect(mongoUri, {
+      serverSelectionTimeoutMS: 15000,
+    });
+    console.log('MongoDB connected');
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error('MongoDB connection failed:', err.message);
+    console.error(
+      'Check MONGODB_URI, Atlas IP access (allow 0.0.0.0/0 or Render outbound), and database user/password.'
+    );
+    process.exit(1);
+  }
+}
+
+start();
