@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['Admin', 'Teacher', 'Student'],
+    enum: ['Admin', 'Faculty', 'Teacher', 'Student'],
     required: true,
   },
   // Student specific fields
@@ -29,7 +29,13 @@ const userSchema = new mongoose.Schema({
   department: String,
   year: String,
   section: String,
-  mobile: String,
+  mobile: {
+    type: String,
+    validate: {
+      validator: (value) => !value || /^\d{10}$/.test(value),
+      message: 'Mobile number must contain exactly 10 digits.',
+    },
+  },
 }, { timestamps: true });
 
 // Hash password before saving

@@ -4,6 +4,7 @@ import { Typography, Box, TextField } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import { API_BASE } from '../config';
 
 const CreateAssignment = () => {
   const { courseId } = useParams();
@@ -25,7 +26,7 @@ const CreateAssignment = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/assignments', formData, {
+      await axios.post(`${API_BASE}/api/assignments`, formData, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'

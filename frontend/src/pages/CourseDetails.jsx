@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, ListGroup, Button, Modal, Form, Spinner, Alert, Badge } from 'react-bootstrap';
-import { Typography, Box, Paper, IconButton, Tabs, Tab, Divider } from '@mui/material';
+import { Typography, Box, Paper, IconButton, Tabs, Tab, Divider, Rating } from '@mui/material';
 import PictureAsPdf from '@mui/icons-material/PictureAsPdf';
 import Movie from '@mui/icons-material/Movie';
 import Description from '@mui/icons-material/Description';
@@ -10,13 +10,17 @@ import Download from '@mui/icons-material/Download';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import QuizIcon from '@mui/icons-material/Quiz';
 import axios from 'axios';
+import { API_BASE } from '../config';
+import FeedbackForm from '../components/FeedbackForm';
 
 const CourseDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [course, setCourse] = useState(null);
   const [materials, setMaterials] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
   const [assignments, setAssignments] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
   
   const [showUpload, setShowUpload] = useState(false);
@@ -38,14 +42,28 @@ const CourseDetails = () => {
     const token = localStorage.getItem('token');
     const headers = { Authorization: `Bearer ${token}` };
     try {
-      const [mRes, qRes, aRes] = await Promise.all([
-        axios.get(`http://localhost:5000/api/courses/${id}/materials`, { headers }),
-        axios.get(`http://localhost:5000/api/quizzes/course/${id}`, { headers }),
-        axios.get(`http://localhost:5000/api/assignments/course/${id}`, { headers })
-      ]);
-      setMaterials(mRes.data);
-      setQuizzes(qRes.data);
-      setAssignments(aRes.data);
+      const requests = [
+        axios.get(`${API_BASE}/api/courses/${id}`, { headers }),
+        axios.get(`${API_BASE}/api/courses/${id}/materials`, { headers }),
+        axios.get(`${API_BASE}/api/quizzes/course/${id}`, { headers }),
+        axios.get(`${API_BASE}/api/assignments/course/${id}`, { headers })
+      ];
+      
+      if (user.role !== 'Student') {
+        requests.push(axios.get(`${API_BASE}/api/feedback/teacher/${user.id}`, { headers }));
+      }
+
+      const results = await Promise.all(requests);
+      
+      setCourse(results[0].data);
+      setMaterials(results[1].data);
+      setQuizzes(results[2].data);
+      setAssignments(results[3].data);
+      if (user.role !== 'Student' && results[4]) {
+        // Filter feedback for this specific course
+        const courseFeedback = results[4].data.filter(f => f.course?._id === id || f.course === id);
+        setFeedbacks(courseFeedback);
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -63,7 +81,7 @@ const CourseDetails = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/courses/material', formData, {
+      await axios.post(`${API_BASE}/api/courses/material`, formData, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -84,7 +102,7 @@ const CourseDetails = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/assignments/submit', formData, {
+      await axios.post(`${API_BASE}/api/assignments/submit`, formData, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -112,6 +130,7 @@ const CourseDetails = () => {
           <Tab label="Materials" />
           <Tab label="Quizzes" />
           <Tab label="Assignments" />
+          {user.role !== 'Student' && <Tab label="Feedback Analysis" />}
         </Tabs>
       </Box>
 
@@ -143,7 +162,7 @@ const CourseDetails = () => {
                             <Typography variant="caption" color="textSecondary">{m.type} • {new Date(m.createdAt).toLocaleDateString()}</Typography>
                           </div>
                         </div>
-                        <IconButton href={`http://localhost:5000${m.fileUrl}`} target="_blank">
+                        <IconButton href={`${API_BASE}${m.fileUrl}`} target="_blank">
                           <Download />
                         </IconButton>
                       </ListGroup.Item>
@@ -233,7 +252,7 @@ const CourseDetails = () => {
                         </div>
                         <div className="mt-2 d-flex gap-2">
                           {a.fileUrl && (
-                            <Button variant="outline-dark" size="sm" href={`http://localhost:5000${a.fileUrl}`} target="_blank">
+                            <Button variant="outline-dark" size="sm" href={`${API_BASE}${a.fileUrl}`} target="_blank">
                               <Download sx={{ fontSize: 16, mr: 1 }} /> Reference
                             </Button>
                           )}
@@ -253,9 +272,59 @@ const CourseDetails = () => {
                 </ListGroup>
               </Card>
             )}
+
+            {activeTab === 3 && user.role !== 'Student' && (
+              <Card className="shadow-sm border-0" style={{ borderRadius: '15px' }}>
+                <Card.Header className="bg-white border-0 py-3">
+                  <Typography variant="h6">Student Feedback & Ratings</Typography>
+                </Card.Header>
+                <ListGroup variant="flush">
+                  {feedbacks.length === 0 ? (
+                    <ListGroup.Item className="py-5 text-center text-muted">No feedback received yet.</ListGroup.Item>
+                  ) : (
+                    feedbacks.map((f) => (
+                      <ListGroup.Item key={f._id} className="py-4">
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                          <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+                            {f.anonymous ? 'Anonymous Student' : f.student?.name}
+                          </Typography>
+                          <Rating value={f.rating} readOnly size="small" />
+                        </Box>
+                        <Typography variant="body2" color="textSecondary">"{f.comment}"</Typography>
+                        <Typography variant="caption" color="textSecondary" sx={{ mt: 1, display: 'block' }}>
+                          Submitted on {new Date(f.createdAt).toLocaleDateString()}
+                        </Typography>
+                      </ListGroup.Item>
+                    ))
+                  )}
+                </ListGroup>
+              </Card>
+            )}
           </Col>
 
           <Col md={4}>
+            {user.role !== 'Student' && feedbacks.length > 0 && (
+              <Paper elevation={0} sx={{ p: 3, borderRadius: 4, bgcolor: '#eef2ff', border: '1px solid #c7d2fe', mb: 3 }}>
+                <Typography variant="subtitle2" color="primary" sx={{ fontWeight: 'bold', mb: 1 }}>COURSE RATING</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Typography variant="h3" sx={{ fontWeight: 800 }}>
+                    {(feedbacks.reduce((acc, f) => acc + f.rating, 0) / feedbacks.length).toFixed(1)}
+                  </Typography>
+                  <Box>
+                    <Rating value={feedbacks.reduce((acc, f) => acc + f.rating, 0) / feedbacks.length} readOnly precision={0.5} />
+                    <Typography variant="caption" className="d-block text-muted">{feedbacks.length} Student Reviews</Typography>
+                  </Box>
+                </Box>
+              </Paper>
+            )}
+            {user.role === 'Student' && course && (
+              <Box sx={{ mb: 4 }}>
+                <FeedbackForm 
+                  courseId={id} 
+                  teacherId={course.teacher?._id} 
+                />
+              </Box>
+            )}
             <Paper elevation={0} sx={{ p: 3, borderRadius: 4, bgcolor: '#f8fafc', border: '1px solid #e2e8f0' }}>
               <Typography variant="h6" gutterBottom>Dashboard</Typography>
               <Typography variant="body2" color="textSecondary" paragraph>

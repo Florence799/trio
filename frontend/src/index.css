@@ -1,50 +1,261 @@
 :root {
-  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-  --secondary-gradient: linear-gradient(135deg, #3b82f6 0%, #2dd4bf 100%);
+  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #7c3aed 55%, #a855f7 100%);
+  --primary-gradient-soft: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(124, 58, 237, 0.08) 100%);
+  --secondary-gradient: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
   --surface-color: #ffffff;
-  --bg-color: #f8fafc;
-  --text-primary: #1e293b;
+  --bg-color: #f1f5f9;
+  --bg-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.06) 0px, transparent 45%),
+    radial-gradient(at 100% 100%, rgba(20, 184, 166, 0.06) 0px, transparent 40%),
+    radial-gradient(at 0% 100%, rgba(99, 102, 241, 0.05) 0px, transparent 45%);
+  --text-primary: #0f172a;
   --text-secondary: #64748b;
-  --accent-color: #6366f1;
+  --accent-color: #5b5cf0;
+  --navbar-height: 72px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
   background-color: var(--bg-color);
+  background-image: var(--bg-mesh);
+  background-attachment: fixed;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(99, 102, 241, 0.25);
+  color: var(--text-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* App shell behind authenticated pages */
+.app-shell {
+  min-height: calc(100vh - var(--navbar-height));
+  padding-bottom: 2rem;
+}
+
+/* Navbar */
+.lms-navbar {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06) !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 4px 24px rgba(15, 23, 42, 0.06);
+  padding-top: 0.65rem !important;
+  padding-bottom: 0.65rem !important;
+  min-height: var(--navbar-height);
+}
+
+.lms-navbar .navbar-brand {
+  font-size: 1.15rem;
+  transition: opacity 0.2s ease;
+}
+
+.lms-navbar .navbar-brand:hover {
+  opacity: 0.92;
+}
+
+.lms-navbar .nav-link {
+  border-radius: 10px;
+  margin: 0 0.15rem;
+  font-weight: 600 !important;
+  color: #475569 !important;
+}
+
+.lms-navbar .nav-link:hover {
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--accent-color) !important;
+}
+
+.lms-navbar .dropdown-toggle {
+  border-radius: 10px;
+  font-weight: 600 !important;
+}
+
+.hero-page,
+.login-page {
+  position: relative;
+  min-height: calc(100vh - var(--navbar-height));
+  overflow: hidden;
+}
+
+.hero-page {
+  background: linear-gradient(125deg, rgba(15, 23, 42, 0.75) 0%, rgba(49, 46, 129, 0.65) 45%, rgba(88, 28, 135, 0.55) 100%),
+    url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1920&q=80") center/cover no-repeat;
+}
+
+.login-page {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 27, 75, 0.88) 40%, rgba(49, 46, 129, 0.85) 100%),
+    radial-gradient(ellipse 120% 80% at 20% 20%, rgba(99, 102, 241, 0.35) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 60% at 80% 80%, rgba(20, 184, 166, 0.22) 0%, transparent 45%);
+}
+
+.login-mesh-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes loginOrbA {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-12px, 18px) scale(1.08);
+  }
+}
+
+@keyframes loginOrbB {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(16px, -14px) scale(1.05);
+  }
+}
+
+.hero-overlay::before,
+.hero-overlay::after,
+.login-page::before,
+.login-page::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+  animation: floatBlob 10s ease-in-out infinite alternate;
+}
+
+.hero-overlay::before,
+.login-page::before {
+  width: 320px;
+  height: 320px;
+  top: 5%;
+  left: -100px;
+  background: rgba(99, 102, 241, 0.35);
+}
+
+.hero-overlay::after,
+.login-page::after {
+  width: 400px;
+  height: 400px;
+  right: -140px;
+  bottom: -60px;
+  background: rgba(168, 85, 247, 0.28);
+  animation-delay: 2s;
+}
+
+.floating-card {
+  animation: cardRise 0.65s cubic-bezier(0.22, 1, 0.36, 1), cardFloat 7s ease-in-out infinite 0.65s;
+}
+
+@keyframes floatBlob {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-28px) scale(1.06);
+  }
+}
+
+@keyframes cardRise {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes cardFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08), 0 24px 48px rgba(99, 102, 241, 0.12);
+}
+
+/* Course & content cards */
+.lms-card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.lms-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12) !important;
+}
+
+/* Stat tiles on dashboard */
+.stat-tile {
+  border-radius: 16px !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.stat-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, transparent 55%);
+  pointer-events: none;
 }
 
 .nav-link {
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .nav-link:hover {
   color: var(--accent-color) !important;
-  transform: translateY(-1px);
 }
 
 .custom-tabs .nav-link {
   border-radius: 12px !important;
-  margin: 0 5px;
+  margin: 0 4px;
   border: none !important;
   color: var(--text-secondary);
+  font-weight: 600;
 }
 
 .custom-tabs .nav-link.active {
   background: var(--primary-gradient) !important;
   color: white !important;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
 }
 
 .btn-primary-custom {
@@ -52,10 +263,35 @@ body {
   border: none;
   color: white;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-primary-custom:hover {
-  transform: scale(1.02);
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(99, 102, 241, 0.4);
+}
+
+/* Bootstrap alerts slightly softer */
+.alert {
+  border-radius: 14px;
+  border: none;
+}
+
+/* Scrollbar (WebKit) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.04);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.35);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.55);
 }

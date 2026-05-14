@@ -14,6 +14,9 @@ app.use(cors({
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
+// Public read-only stats (no auth)
+app.use('/api/public', require('./routes/publicRoutes'));
+
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/courses', require('./routes/courseRoutes'));

@@ -1,9 +1,12 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
+const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
 const register = async (req, res) => {
   try {
     const { name, email, password, role, registeredNumber, department, year, section, mobile } = req.body;
+    const normalizedRole = role === 'Teacher' ? 'Faculty' : role;
     
     // Trim inputs
     const trimmedEmail = email?.trim().toLowerCase();
@@ -26,14 +29,24 @@ const register = async (req, res) => {
       }
     }
 
+    if (!/^\d{10}$/.test((mobile || '').trim())) {
+      return res.status(400).send({ error: 'Mobile number must contain exactly 10 digits.' });
+    }
+
+    if (!PASSWORD_REGEX.test(password || '')) {
+      return res.status(400).send({
+        error: 'Password must be at least 8 characters and include 1 uppercase letter, 1 number, and 1 special character.'
+      });
+    }
+
     const user = new User({ 
       name: name?.trim(), 
       email: trimmedEmail, 
       password, 
-      role, 
+      role: normalizedRole,
       registeredNumber: trimmedRegNo, 
       department, 
-      year, 
+      year: normalizedRole === 'Student' ? year : undefined,
       section, 
       mobile: mobile?.trim() 
     });
@@ -82,11 +95,35 @@ const getUserStats = async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
     const students = await User.countDocuments({ role: 'Student' });
-    const teachers = await User.countDocuments({ role: 'Teacher' });
-    res.send({ totalUsers, students, teachers });
+    const faculty = await User.countDocuments({ role: { $in: ['Faculty', 'Teacher'] } });
+    res.send({ totalUsers, students, faculty, teachers: faculty });
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
 };
 
-module.exports = { register, login, getUserStats };
+const updateStudentYear = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { year } = req.body;
+    if (!['1st Year', '2nd Year', '3rd Year', '4th Year'].includes(year)) {
+      return res.status(400).send({ error: 'Invalid academic year.' });
+    }
+
+    const student = await User.findOneAndUpdate(
+      { _id: userId, role: 'Student' },
+      { year },
+      { new: true }
+    );
+
+    if (!student) {
+      return res.status(404).send({ error: 'Student not found.' });
+    }
+
+    res.send({ message: 'Academic year updated successfully.', student });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
+module.exports = { register, login, getUserStats, updateStudentYear };

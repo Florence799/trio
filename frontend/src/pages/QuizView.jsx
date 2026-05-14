@@ -6,6 +6,7 @@ import Timer from '@mui/icons-material/Timer';
 import QuizIcon from '@mui/icons-material/Quiz';
 import CheckCircle from '@mui/icons-material/CheckCircle';
 import axios from 'axios';
+import { API_BASE } from '../config';
 
 const QuizView = () => {
   const { quizId } = useParams();
@@ -21,7 +22,7 @@ const QuizView = () => {
     const fetchQuiz = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:5000/api/quizzes/${quizId}`, {
+        const response = await axios.get(`${API_BASE}/api/quizzes/${quizId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -55,7 +56,7 @@ const QuizView = () => {
     setSubmitted(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(`http://localhost:5000/api/quizzes/submit`, {
+      const response = await axios.post(`${API_BASE}/api/quizzes/submit`, {
         quizId,
         answers: Object.values(answers)
       }, {

@@ -4,7 +4,10 @@ import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { Box, Typography } from '@mui/material';
 import School from '@mui/icons-material/School';
 
-// Pages
+import RequireAuth from './components/RequireAuth';
+import FacultyPortalLayout from './components/FacultyPortalLayout';
+import { FacultyOnly, StudentOnly, NonStudentOnly } from './components/RouteGuards';
+
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -16,6 +19,12 @@ import QuizReview from './pages/QuizReview';
 import CreateQuiz from './pages/CreateQuiz';
 import CreateAssignment from './pages/CreateAssignment';
 import ViewSubmissions from './pages/ViewSubmissions';
+import FeedbackAnalysis from './pages/FeedbackAnalysis';
+import Home from './pages/Home';
+import MyCourses from './pages/MyCourses';
+import AssignmentsPage from './pages/AssignmentsPage';
+import QuizzesPage from './pages/QuizzesPage';
+import RegisteredUsers from './pages/RegisteredUsers';
 
 function App() {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -28,34 +37,48 @@ function App() {
 
   return (
     <Router>
-      <Box sx={{ flexGrow: 1, minHeight: '100vh', bgcolor: '#f1f5f9' }}>
-        {/* Navigation */}
-        <Navbar expand="lg" sticky="top" className="mb-4 shadow-sm py-3" style={{ background: 'white' }}>
+      <Box className="app-shell" sx={{ flexGrow: 1, minHeight: '100vh', pt: { xs: 2, md: 2.5 } }}>
+        <Navbar expand="lg" sticky="top" className="lms-navbar mb-0 py-0">
           <Container>
-            <Navbar.Brand href="/" className="d-flex align-items-center">
-              <Box sx={{ 
-                bgcolor: '#6366f1', 
-                p: 1, 
-                borderRadius: 2, 
-                display: 'flex', 
-                mr: 1.5,
-                boxShadow: '0 4px 10px rgba(99, 102, 241, 0.3)'
-              }}>
-                <School sx={{ color: 'white' }} />
+            <Navbar.Brand href="/" className="d-flex align-items-center gap-2 text-decoration-none">
+              <Box
+                sx={{
+                  background: 'linear-gradient(135deg, #6366f1 0%, #7c3aed 100%)',
+                  p: 1.1,
+                  borderRadius: 2.5,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 8px 20px rgba(99, 102, 241, 0.45)',
+                }}
+              >
+                <School sx={{ color: 'white', fontSize: 26 }} />
               </Box>
-              <span style={{ fontWeight: 800, letterSpacing: '0.5px', color: '#1e293b' }}>LMS PRO</span>
+              <Box component="span" sx={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+                <span style={{ fontWeight: 800, letterSpacing: '-0.03em', color: '#0f172a', fontSize: '1.2rem' }}>
+                  LMS Pro
+                </span>
+                <Typography component="span" variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
+                  Learning hub
+                </Typography>
+              </Box>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ms-auto align-items-center">
                 {user ? (
                   <>
-                    <Nav.Link href="/dashboard" className="px-3">Dashboard</Nav.Link>
-                    <Nav.Link href="/performance" className="px-3">Performance</Nav.Link>
+                    <Nav.Link href="/dashboard" className="px-3">
+                      Dashboard
+                    </Nav.Link>
+                    <Nav.Link href="/performance" className="px-3">
+                      Performance
+                    </Nav.Link>
                     <NavDropdown title={user.name} id="user-dropdown" className="px-3">
                       <NavDropdown.Item disabled>
                         <Typography variant="caption" color="textSecondary">
-                          {user.role} {user.registeredNumber ? `(${user.registeredNumber})` : ''}
+                          {user.role === 'Teacher' ? 'Faculty' : user.role}{' '}
+                          {user.registeredNumber ? `(${user.registeredNumber})` : ''}
                         </Typography>
                       </NavDropdown.Item>
                       <NavDropdown.Divider />
@@ -64,8 +87,12 @@ function App() {
                   </>
                 ) : (
                   <>
-                    <Nav.Link href="/login" className="px-3">Login</Nav.Link>
-                    <Nav.Link href="/register" className="px-3">Register</Nav.Link>
+                    <Nav.Link href="/login" className="px-3">
+                      Login
+                    </Nav.Link>
+                    <Nav.Link href="/register" className="px-3">
+                      Register
+                    </Nav.Link>
                   </>
                 )}
               </Nav>
@@ -73,23 +100,81 @@ function App() {
           </Container>
         </Navbar>
 
-        {/* Routes */}
         <Routes>
-          <Route path="/" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
+          <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          
-          {/* Protected Routes */}
-          <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
-          <Route path="/create-course" element={user && (user.role === 'Teacher' || user.role === 'Admin') ? <CreateCourse /> : <Navigate to="/" />} />
-          <Route path="/courses/:id" element={user ? <CourseDetails /> : <Navigate to="/login" />} />
-          <Route path="/quizzes/:quizId" element={user?.role === 'Student' ? <QuizView /> : <Navigate to="/" />} />
-          <Route path="/performance" element={user ? <Performance /> : <Navigate to="/login" />} />
-          <Route path="/quiz-review/:resultId" element={user ? <QuizReview /> : <Navigate to="/login" />} />
-          <Route path="/courses/:courseId/create-quiz" element={user?.role !== 'Student' ? <CreateQuiz /> : <Navigate to="/" />} />
-          <Route path="/courses/:courseId/create-assignment" element={user?.role !== 'Student' ? <CreateAssignment /> : <Navigate to="/" />} />
-          <Route path="/quizzes/:quizId/submissions" element={user?.role !== 'Student' ? <ViewSubmissions /> : <Navigate to="/" />} />
-          
+
+          <Route element={<RequireAuth />}>
+            <Route element={<FacultyPortalLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/my-courses" element={<MyCourses />} />
+              <Route path="/assignments" element={<AssignmentsPage />} />
+              <Route path="/quizzes" element={<QuizzesPage />} />
+              <Route path="/performance" element={<Performance />} />
+              <Route path="/courses/:id" element={<CourseDetails />} />
+              <Route path="/quiz-review/:resultId" element={<QuizReview />} />
+
+              <Route
+                path="/quizzes/:quizId"
+                element={
+                  <StudentOnly>
+                    <QuizView />
+                  </StudentOnly>
+                }
+              />
+
+              <Route
+                path="/create-course"
+                element={
+                  <FacultyOnly>
+                    <CreateCourse />
+                  </FacultyOnly>
+                }
+              />
+              <Route
+                path="/registered-users"
+                element={
+                  <NonStudentOnly>
+                    <RegisteredUsers />
+                  </NonStudentOnly>
+                }
+              />
+              <Route
+                path="/feedback-analysis"
+                element={
+                  <NonStudentOnly>
+                    <FeedbackAnalysis />
+                  </NonStudentOnly>
+                }
+              />
+              <Route
+                path="/courses/:courseId/create-quiz"
+                element={
+                  <NonStudentOnly>
+                    <CreateQuiz />
+                  </NonStudentOnly>
+                }
+              />
+              <Route
+                path="/courses/:courseId/create-assignment"
+                element={
+                  <NonStudentOnly>
+                    <CreateAssignment />
+                  </NonStudentOnly>
+                }
+              />
+              <Route
+                path="/quizzes/:quizId/submissions"
+                element={
+                  <NonStudentOnly>
+                    <ViewSubmissions />
+                  </NonStudentOnly>
+                }
+              />
+            </Route>
+          </Route>
+
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Box>

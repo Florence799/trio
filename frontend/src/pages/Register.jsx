@@ -3,14 +3,15 @@ import { Container, Form, Card, Alert, Row, Col, Tab, Tabs } from 'react-bootstr
 import { Box, Typography, TextField, Button as MuiButton, MenuItem, InputAdornment, IconButton } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import School from '@mui/icons-material/School';
 import Badge from '@mui/icons-material/Badge';
 import Phone from '@mui/icons-material/Phone';
 import Email from '@mui/icons-material/Email';
 import Person from '@mui/icons-material/Person';
 import Work from '@mui/icons-material/Work';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { API_BASE } from '../config';
+
+const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 
 const Register = () => {
   const [role, setRole] = useState('Student');
@@ -20,14 +21,12 @@ const Register = () => {
     password: '',
     registeredNumber: '',
     department: '',
-    year: '',
     section: '',
     mobile: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,8 +36,16 @@ const Register = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    if (!/^\d{10}$/.test(formData.mobile.trim())) {
+      setError('Mobile number must contain exactly 10 digits.');
+      return;
+    }
+    if (!PASSWORD_REGEX.test(formData.password)) {
+      setError('Password must be at least 8 characters and include 1 uppercase letter, 1 number, and 1 special character.');
+      return;
+    }
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', { ...formData, role });
+      const response = await axios.post(`${API_BASE}/api/auth/register`, { ...formData, role });
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       setSuccess(`${role} registered successfully! Redirecting...`);
@@ -64,7 +71,7 @@ const Register = () => {
           fill
         >
           <Tab eventKey="Student" title="Student Registration" />
-          <Tab eventKey="Teacher" title="Faculty Registration" />
+          <Tab eventKey="Faculty" title="Faculty Registration" />
         </Tabs>
 
         {error && <Alert variant="danger" className="text-center">{error}</Alert>}
@@ -175,6 +182,7 @@ const Register = () => {
                   fullWidth
                   label="Mobile Number"
                   name="mobile"
+                  inputProps={{ maxLength: 10, pattern: '\\d{10}' }}
                   variant="outlined"
                   value={formData.mobile}
                   onChange={handleChange}
@@ -194,7 +202,7 @@ const Register = () => {
           </Row>
 
           <Row>
-            <Col md={role === 'Student' ? 4 : 12}>
+            <Col md={role === 'Student' ? 6 : 12}>
               <Box sx={{ mb: 3 }}>
                 <TextField
                   fullWidth
@@ -213,26 +221,7 @@ const Register = () => {
               </Box>
             </Col>
             {role === 'Student' && (
-              <>
-                <Col md={4}>
-                  <Box sx={{ mb: 3 }}>
-                    <TextField
-                      fullWidth
-                      select
-                      label="Year"
-                      name="year"
-                      value={formData.year}
-                      onChange={handleChange}
-                      variant="outlined"
-                      required
-                    >
-                      {['1st Year', '2nd Year', '3rd Year', '4th Year'].map((y) => (
-                        <MenuItem key={y} value={y}>{y}</MenuItem>
-                      ))}
-                    </TextField>
-                  </Box>
-                </Col>
-                <Col md={4}>
+                <Col md={6}>
                   <Box sx={{ mb: 3 }}>
                     <TextField
                       fullWidth
@@ -246,7 +235,6 @@ const Register = () => {
                     />
                   </Box>
                 </Col>
-              </>
             )}
           </Row>
 
@@ -256,6 +244,7 @@ const Register = () => {
               label="Password"
               name="password"
               type={showPassword ? 'text' : 'password'}
+              helperText="Minimum 8 chars with 1 uppercase, 1 number, and 1 special character."
               variant="outlined"
               value={formData.password}
               onChange={handleChange}

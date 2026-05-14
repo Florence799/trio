@@ -3,6 +3,7 @@ import { Container, Form, Card, Alert, Row, Col } from 'react-bootstrap';
 import { Box, Typography, TextField, Button as MuiButton, MenuItem } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE } from '../config';
 
 const CreateCourse = () => {
   const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ const CreateCourse = () => {
     setSuccess('');
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/courses', formData, {
+      await axios.post(`${API_BASE}/api/courses`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSuccess('Course created successfully!');

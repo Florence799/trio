@@ -1,15 +1,25 @@
 const express = require('express');
-const { createCourse, getCourses, uploadMaterial, getCourseMaterials, getCourseById } = require('../controllers/courseController');
+const {
+  createCourse,
+  getCourses,
+  uploadMaterial,
+  getCourseMaterials,
+  deleteMaterial,
+  getCourseById,
+  getRegisteredStudentsByCourse,
+} = require('../controllers/courseController');
 const { auth, authorize } = require('../middleware/auth');
 const upload = require('../middleware/upload');
 const router = express.Router();
 
 // Course routes
-router.post('/', auth, authorize('Teacher', 'Admin'), createCourse);
+router.post('/', auth, authorize('Faculty', 'Teacher', 'Admin'), createCourse);
 router.get('/', auth, getCourses);
+router.get('/:id/students', auth, authorize('Faculty', 'Teacher', 'Admin'), getRegisteredStudentsByCourse);
 
-// Material routes
-router.post('/material', auth, authorize('Teacher', 'Admin'), upload.single('file'), uploadMaterial);
+// Material routes (static paths before `/:id`)
+router.post('/material', auth, authorize('Faculty', 'Teacher', 'Admin'), upload.single('file'), uploadMaterial);
+router.delete('/materials/:materialId', auth, authorize('Faculty', 'Teacher', 'Admin'), deleteMaterial);
 router.get('/:courseId/materials', auth, getCourseMaterials);
 router.get('/:id', auth, getCourseById);
 

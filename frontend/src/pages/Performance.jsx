@@ -7,6 +7,7 @@ import Cancel from '@mui/icons-material/Cancel';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import axios from 'axios';
+import { API_BASE } from '../config';
 
 const Performance = () => {
   const [stats, setStats] = useState([]);
@@ -16,7 +17,7 @@ const Performance = () => {
     const fetchStats = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/quizzes/stats', {
+        const response = await axios.get(`${API_BASE}/api/quizzes/stats`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setStats(response.data);

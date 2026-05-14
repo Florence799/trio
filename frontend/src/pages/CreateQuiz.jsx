@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import { API_BASE } from '../config';
 
 const CreateQuiz = () => {
   const { courseId } = useParams();
@@ -46,7 +47,7 @@ const CreateQuiz = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/quizzes', {
+      await axios.post(`${API_BASE}/api/quizzes`, {
         title,
         courseId,
         timeLimit,

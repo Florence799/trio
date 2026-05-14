@@ -6,6 +6,7 @@ import CheckCircle from '@mui/icons-material/CheckCircle';
 import Cancel from '@mui/icons-material/Cancel';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
+import { API_BASE } from '../config';
 
 const QuizReview = () => {
   const { resultId } = useParams();
@@ -19,7 +20,7 @@ const QuizReview = () => {
     const fetchResult = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:5000/api/quizzes/result/${resultId}`, {
+        const response = await axios.get(`${API_BASE}/api/quizzes/result/${resultId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setResult(response.data);
@@ -37,7 +38,7 @@ const QuizReview = () => {
     try {
       setSavingNotes(true);
       const token = localStorage.getItem('token');
-      await axios.post(`http://localhost:5000/api/quizzes/result/${resultId}/notes`, 
+      await axios.post(`${API_BASE}/api/quizzes/result/${resultId}/notes`, 
         { studentNotes: notes },
         { headers: { Authorization: `Bearer ${token}` } }
       );

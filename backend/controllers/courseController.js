@@ -1,5 +1,8 @@
+const fs = require('fs').promises;
+const path = require('path');
 const Course = require('../models/Course');
 const Material = require('../models/Material');
+const User = require('../models/User');
 
 const createCourse = async (req, res) => {
   try {
@@ -26,11 +29,13 @@ const getCourses = async (req, res) => {
       // Students only see courses assigned to their dept/year/section
       query = {
         department: req.user.department,
-        year: req.user.year,
         section: req.user.section
       };
-    } else if (req.user.role === 'Teacher') {
-      // Teachers see their own courses
+      if (req.user.year) {
+        query.year = req.user.year;
+      }
+    } else if (req.user.role === 'Teacher' || req.user.role === 'Faculty') {
+      // Faculty see their own courses
       query = { teacher: req.user.id };
     }
     // Admins see everything (no query changes)
@@ -60,8 +65,38 @@ const uploadMaterial = async (req, res) => {
 
 const getCourseMaterials = async (req, res) => {
   try {
-    const materials = await Material.find({ course: req.params.courseId });
+    const materials = await Material.find({ course: req.params.courseId }).sort({ createdAt: -1 });
     res.send(materials);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
+const deleteMaterial = async (req, res) => {
+  try {
+    const material = await Material.findById(req.params.materialId);
+    if (!material) return res.status(404).send({ error: 'Material not found' });
+
+    const course = await Course.findById(material.course);
+    if (!course) return res.status(404).send({ error: 'Course not found' });
+
+    const isOwner = course.teacher.toString() === req.user.id.toString();
+    if (req.user.role !== 'Admin' && !isOwner) {
+      return res.status(403).send({ error: 'Access denied.' });
+    }
+
+    if (material.fileUrl) {
+      const relative = material.fileUrl.replace(/^\//, '');
+      const filePath = path.join(process.cwd(), relative);
+      try {
+        await fs.unlink(filePath);
+      } catch {
+        // File missing on disk — still remove DB record
+      }
+    }
+
+    await Material.findByIdAndDelete(req.params.materialId);
+    res.send({ message: 'Material deleted successfully.' });
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
@@ -77,4 +112,29 @@ const getCourseById = async (req, res) => {
   }
 };
 
-module.exports = { createCourse, getCourses, uploadMaterial, getCourseMaterials, getCourseById };
+const getRegisteredStudentsByCourse = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.id);
+    if (!course) return res.status(404).send({ error: 'Course not found' });
+
+    const students = await User.find({
+      role: 'Student',
+      department: course.department,
+      section: course.section,
+    }).select('name email registeredNumber department year section mobile createdAt');
+
+    res.send({ course, students });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
+module.exports = {
+  createCourse,
+  getCourses,
+  uploadMaterial,
+  getCourseMaterials,
+  deleteMaterial,
+  getCourseById,
+  getRegisteredStudentsByCourse,
+};

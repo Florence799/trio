@@ -4,6 +4,7 @@ import { Container, Table, Card, Badge, Spinner, Button } from 'react-bootstrap'
 import { Typography, Box, Paper, IconButton } from '@mui/material';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
+import { API_BASE } from '../config';
 
 const ViewSubmissions = () => {
   const { quizId } = useParams();
@@ -16,7 +17,7 @@ const ViewSubmissions = () => {
     const fetchSubmissions = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:5000/api/quizzes/submissions/${quizId}`, {
+        const response = await axios.get(`${API_BASE}/api/quizzes/submissions/${quizId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setSubmissions(response.data.submissions);
