@@ -272,7 +272,7 @@ const Login = () => {
           <Box sx={{ mb: 2.5 }}>
             <TextField
               fullWidth
-              label={loginType === 'student' ? 'Registered number or email' : 'Email or faculty ID'}
+              label={loginType === 'student' ? 'Email Address or Registered Number' : 'Email Address or Faculty ID'}
               variant="outlined"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
@@ -282,12 +282,12 @@ const Login = () => {
                 input: {
                   startAdornment: (
                     <InputAdornment position="start">
-                      {loginType === 'student' ? <Badge sx={{ color: 'primary.main' }} /> : <Email sx={{ color: 'primary.main' }} />}
+                      <Email sx={{ color: 'primary.main' }} />
                     </InputAdornment>
                   ),
                 },
               }}
-              placeholder={loginType === 'student' ? 'e.g. 23A91A0501' : 'e.g. admin@lms.com'}
+              placeholder={loginType === 'student' ? 'student@email.com or 23A91A0501' : 'faculty@email.com or FAC123'}
             />
           </Box>
 
