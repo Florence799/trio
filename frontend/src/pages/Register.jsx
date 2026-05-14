@@ -61,7 +61,7 @@ const Register = () => {
     <Container className="py-5">
       <Card className="glass-card" style={{ width: '100%', maxWidth: '850px', margin: '0 auto', padding: '40px', border: 'none' }}>
         <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 800, color: '#1e293b', mb: 4 }}>
-          Join the LMS Community
+          Register with Email
         </Typography>
 
         <Tabs
@@ -268,11 +268,13 @@ const Register = () => {
             variant="contained"
             size="large"
             type="submit"
+            startIcon={<Email sx={{ color: 'white' }} />}
             sx={{ 
               borderRadius: '16px', 
               py: 2, 
               fontSize: '1.1rem',
               fontWeight: 'bold',
+              textTransform: 'none',
               background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
               boxShadow: '0 8px 25px rgba(99, 102, 241, 0.3)',
               '&:hover': {
@@ -281,7 +283,7 @@ const Register = () => {
               }
             }}
           >
-            Create Your Account
+            Register with Email
           </MuiButton>
         </Form>
         <Box sx={{ mt: 3, textAlign: 'center' }}>

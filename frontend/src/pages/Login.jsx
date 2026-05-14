@@ -272,7 +272,7 @@ const Login = () => {
           <Box sx={{ mb: 2.5 }}>
             <TextField
               fullWidth
-              label={loginType === 'student' ? 'Email Address or Registered Number' : 'Email Address or Faculty ID'}
+              label={loginType === 'student' ? 'Email or Registered number' : 'Email or Faculty ID'}
               variant="outlined"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
@@ -287,7 +287,7 @@ const Login = () => {
                   ),
                 },
               }}
-              placeholder={loginType === 'student' ? 'student@email.com or 23A91A0501' : 'faculty@email.com or FAC123'}
+              placeholder={loginType === 'student' ? 'e.g. student@lms.com' : 'e.g. admin@lms.com'}
             />
           </Box>
 
@@ -320,11 +320,13 @@ const Login = () => {
             variant="contained"
             size="large"
             type="submit"
+            startIcon={<Email sx={{ color: 'white' }} />}
             sx={{
               borderRadius: '14px',
               py: 2,
               fontSize: '1rem',
               fontWeight: 700,
+              textTransform: 'none',
               boxShadow: '0 8px 28px rgba(99, 102, 241, 0.35)',
               '&:hover': {
                 transform: 'translateY(-2px)',
@@ -332,7 +334,7 @@ const Login = () => {
               },
             }}
           >
-            Enter workspace
+            Sign in with Email
           </MuiButton>
         </Form>
 
