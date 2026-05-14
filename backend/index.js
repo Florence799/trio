@@ -6,23 +6,41 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// CORS: FRONTEND_URL may be comma-separated, e.g. https://lms-8kf.pages.dev,http://localhost:5173
-const defaultOrigins = ['http://localhost:5173'];
+function normalizeOrigin(s) {
+  if (!s || typeof s !== 'string') return '';
+  return s
+    .trim()
+    .replace(/^["']|["']$/g, '')
+    .replace(/\/$/, '');
+}
+
+// CORS: FRONTEND_URL may be comma-separated. Defaults include Cloudflare Pages production for this app.
+const defaultOrigins = ['http://localhost:5173', 'https://lms-8kf.pages.dev'];
 const fromEnv = (process.env.FRONTEND_URL || '')
   .split(',')
-  .map((s) => s.trim())
+  .map(normalizeOrigin)
   .filter(Boolean);
-const allowedOrigins = new Set([...defaultOrigins, ...fromEnv]);
+const allowedOrigins = new Set(
+  [...defaultOrigins.map(normalizeOrigin), ...fromEnv].filter(Boolean)
+);
+
+function isOriginAllowed(origin) {
+  const o = normalizeOrigin(origin);
+  return o && allowedOrigins.has(o);
+}
 
 // Middleware
 app.use(
   cors({
     origin(origin, callback) {
       if (!origin) return callback(null, true);
-      if (allowedOrigins.has(origin)) return callback(null, true);
+      if (isOriginAllowed(origin)) return callback(null, true);
       callback(null, false);
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    optionsSuccessStatus: 204,
   })
 );
 app.use(express.json());
