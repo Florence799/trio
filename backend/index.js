@@ -14,6 +14,8 @@ const ALLOWED_FRONTEND_ORIGINS = [
   'http://127.0.0.1:5173',
   'https://lms-8kf.pages.dev',
   'https://lms.pages.dev',
+  'https://edu.basketind.in',
+  'http://edu.basketind.in',
 ];
 
 function normalizeOrigin(s) {

@@ -6,6 +6,8 @@ import Book from '@mui/icons-material/Book';
 import Assignment from '@mui/icons-material/Assignment';
 import People from '@mui/icons-material/People';
 import Add from '@mui/icons-material/Add';
+import Assessment from '@mui/icons-material/Assessment';
+import EmojiEvents from '@mui/icons-material/EmojiEvents';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE } from '../config';
@@ -52,7 +54,12 @@ const Dashboard = () => {
     fetchDashboardData();
   }, []);
 
-  const stats = [
+  const stats = user.role === 'Student' ? [
+    { title: 'My Courses', count: coursesCount, icon: <School />, color: '#4caf50', path: '/my-courses' },
+    { title: 'Assignments', count: assignmentsCount, icon: <Assignment />, color: '#ff9800', path: '/assignments' },
+    { title: 'Quizzes', count: quizzesCount, icon: <Book />, color: '#2196f3', path: '/quizzes' },
+    { title: 'Performance', count: 'View', icon: <Assessment />, color: '#9c27b0', path: '/performance' },
+  ] : [
     { title: 'My Courses', count: coursesCount, icon: <School />, color: '#4caf50', path: '/my-courses' },
     { title: 'Assignments', count: assignmentsCount, icon: <Assignment />, color: '#ff9800', path: '/assignments' },
     { title: 'Quizzes', count: quizzesCount, icon: <Book />, color: '#2196f3', path: '/quizzes' },
@@ -118,6 +125,55 @@ const Dashboard = () => {
           </MuiButton>
         )}
       </Box>
+
+      {/* Hero Section Explaining Portal Purpose */}
+      <Box 
+        sx={{ 
+          mb: 5, 
+          p: { xs: 4, md: 6 }, 
+          borderRadius: 4, 
+          background: 'linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(49,46,129,0.95) 100%)',
+          color: 'white',
+          textAlign: 'center',
+          boxShadow: '0 20px 40px rgba(15, 23, 42, 0.2)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Typography variant="overline" sx={{ color: '#a855f7', fontWeight: 800, letterSpacing: '0.15em', display: 'block', mb: 1 }}>
+            Welcome to the Smart Learning System
+          </Typography>
+          <Typography variant="h3" sx={{ fontWeight: 800, mb: 3, letterSpacing: '-0.02em', textShadow: '0 4px 12px rgba(0,0,0,0.3)' }}>
+            Empowering Your Academic Excellence
+          </Typography>
+          <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.8)', maxWidth: '800px', margin: '0 auto', fontSize: '1.1rem', lineHeight: 1.6, mb: 4 }}>
+            Our portal is designed to seamlessly connect students and faculty. Here you can discover interactive course modules, engage with assignments and quizzes, receive insightful feedback, and track your performance. Scroll down to access your personalized dashboard details and manage your academic journey.
+          </Typography>
+          <MuiButton 
+            variant="outlined" 
+            sx={{ 
+              color: 'white', 
+              borderColor: 'rgba(255,255,255,0.3)', 
+              borderRadius: '20px', 
+              px: 4, 
+              py: 1.5, 
+              fontWeight: 600,
+              '&:hover': { borderColor: 'white', background: 'rgba(255,255,255,0.1)' }
+            }}
+            onClick={() => window.scrollTo({ top: window.innerHeight * 0.6, behavior: 'smooth' })}
+          >
+            Explore Dashboard
+          </MuiButton>
+        </Box>
+        {/* Background Decorative Elements */}
+        <Box sx={{ position: 'absolute', top: '-20%', left: '-5%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(30px)', pointerEvents: 'none' }} />
+        <Box sx={{ position: 'absolute', bottom: '-20%', right: '-5%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(168,85,247,0.3) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(30px)', pointerEvents: 'none' }} />
+      </Box>
+
+      <Typography variant="h5" sx={{ fontWeight: 800, color: '#0f172a', mb: 3, px: 1 }}>
+        Dashboard Overview
+      </Typography>
 
       {error && <Alert variant="danger" className="shadow-sm">{error}</Alert>}
 
@@ -199,6 +255,95 @@ const Dashboard = () => {
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 See who is mapped to each course cohort.
               </Typography>
+            </Paper>
+          </Col>
+        </Row>
+      )}
+
+      {user.role === 'Student' && (
+        <Row className="mb-4 g-3">
+          <Col md={8}>
+            <Paper
+              elevation={0}
+              sx={{
+                p: { xs: 3, md: 4 },
+                borderRadius: 4,
+                background: 'linear-gradient(135deg, rgba(37,99,235,0.05) 0%, rgba(79,70,229,0.1) 100%)',
+                border: '1px solid rgba(79, 70, 229, 0.2)',
+                position: 'relative',
+                overflow: 'hidden',
+                height: '100%',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 12px 28px rgba(79, 70, 229, 0.15)' },
+              }}
+            >
+              <Box sx={{ position: 'relative', zIndex: 1 }}>
+                <Typography variant="overline" sx={{ color: '#4f46e5', fontWeight: 800, letterSpacing: '0.1em' }}>
+                  Your Learning Journey
+                </Typography>
+                <Typography variant="h4" sx={{ fontWeight: 800, mb: 1.5, color: '#0f172a', letterSpacing: '-0.02em', mt: 0.5 }}>
+                  Keep the momentum going!
+                </Typography>
+                <Typography variant="body1" sx={{ color: 'text.secondary', mb: 3, maxWidth: '80%', fontWeight: 500 }}>
+                  Consistency is the key to mastery. Dive back into your courses, complete your pending assignments, and prepare for upcoming quizzes. You've got this!
+                </Typography>
+                <MuiButton
+                  variant="contained"
+                  onClick={() => navigate('/my-courses')}
+                  sx={{
+                    borderRadius: '12px',
+                    px: 3.5,
+                    py: 1.25,
+                    background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                    textTransform: 'none',
+                    fontWeight: 700,
+                    boxShadow: '0 8px 20px rgba(99, 102, 241, 0.3)',
+                    '&:hover': {
+                      boxShadow: '0 12px 28px rgba(99, 102, 241, 0.45)',
+                    }
+                  }}
+                >
+                  Continue Learning
+                </MuiButton>
+              </Box>
+              <School sx={{ 
+                position: 'absolute', 
+                right: -20, 
+                bottom: -30, 
+                fontSize: 220, 
+                color: 'rgba(79, 70, 229, 0.08)',
+                transform: 'rotate(-15deg)',
+                pointerEvents: 'none',
+              }} />
+            </Paper>
+          </Col>
+          <Col md={4}>
+            <Paper
+              elevation={0}
+              onClick={() => navigate('/performance')}
+              sx={{
+                p: { xs: 3, md: 4 },
+                borderRadius: 4,
+                background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+                color: 'white',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                cursor: 'pointer',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 12px 28px rgba(15, 23, 42, 0.4)' },
+              }}
+            >
+               <EmojiEvents sx={{ fontSize: 70, color: '#fbbf24', mb: 2, filter: 'drop-shadow(0 4px 12px rgba(251,191,36,0.3))' }} />
+               <Typography variant="h5" sx={{ fontWeight: 800 }}>
+                 Student Hub
+               </Typography>
+               <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', mt: 1.5, fontWeight: 500 }}>
+                 Track your overall performance, recent feedback, and academic growth in one place.
+               </Typography>
             </Paper>
           </Col>
         </Row>
