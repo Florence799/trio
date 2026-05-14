@@ -74,6 +74,8 @@ async function start() {
   try {
     await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 15000,
+      // Helps Windows / some networks where mongodb+srv SRV lookup fails (ECONNREFUSED querySrv)
+      family: 4,
     });
     console.log('MongoDB connected');
     app.listen(PORT, () => {

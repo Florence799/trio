@@ -25,13 +25,23 @@ const CourseDetails = () => {
   
   const [showUpload, setShowUpload] = useState(false);
   const [uploadData, setUploadData] = useState({ title: '', type: 'PDF', file: null });
+  const [materialUploading, setMaterialUploading] = useState(false);
+  const [materialNotice, setMaterialNotice] = useState(null);
   
   const [showSubmit, setShowSubmit] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [submitFile, setSubmitFile] = useState(null);
   
   const [activeTab, setActiveTab] = useState(0);
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('user') || '{}');
+    } catch {
+      return {};
+    }
+  })();
+  const userId = user.id || user._id;
+  const userRole = user.role;
 
   useEffect(() => {
     fetchAllData();
@@ -40,6 +50,10 @@ const CourseDetails = () => {
   const fetchAllData = async () => {
     setLoading(true);
     const token = localStorage.getItem('token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     const headers = { Authorization: `Bearer ${token}` };
     try {
       const requests = [
@@ -49,8 +63,8 @@ const CourseDetails = () => {
         axios.get(`${API_BASE}/api/assignments/course/${id}`, { headers })
       ];
       
-      if (user.role !== 'Student') {
-        requests.push(axios.get(`${API_BASE}/api/feedback/teacher/${user.id}`, { headers }));
+      if (userRole && userRole !== 'Student' && userId) {
+        requests.push(axios.get(`${API_BASE}/api/feedback/teacher/${userId}`, { headers }));
       }
 
       const results = await Promise.all(requests);
@@ -59,10 +73,11 @@ const CourseDetails = () => {
       setMaterials(results[1].data);
       setQuizzes(results[2].data);
       setAssignments(results[3].data);
-      if (user.role !== 'Student' && results[4]) {
-        // Filter feedback for this specific course
+      if (userRole && userRole !== 'Student' && results[4]) {
         const courseFeedback = results[4].data.filter(f => f.course?._id === id || f.course === id);
         setFeedbacks(courseFeedback);
+      } else {
+        setFeedbacks([]);
       }
     } catch (err) {
       console.error(err);
@@ -73,29 +88,45 @@ const CourseDetails = () => {
 
   const handleUpload = async (e) => {
     e.preventDefault();
+    if (!uploadData.file) {
+      setMaterialNotice({ variant: 'danger', text: 'Please select a file to upload.' });
+      return;
+    }
+    const titleUsed = uploadData.title.trim();
     const formData = new FormData();
-    formData.append('title', uploadData.title);
+    formData.append('title', titleUsed);
     formData.append('type', uploadData.type);
     formData.append('courseId', id);
     formData.append('file', uploadData.file);
 
+    setMaterialUploading(true);
+    setMaterialNotice(null);
     try {
       const token = localStorage.getItem('token');
       await axios.post(`${API_BASE}/api/courses/material`, formData, {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
+        headers: { Authorization: `Bearer ${token}` },
       });
       setShowUpload(false);
-      fetchAllData();
+      setUploadData({ title: '', type: 'PDF', file: null });
+      setMaterialNotice({
+        variant: 'success',
+        text: `Material "${titleUsed}" was uploaded successfully and appears in the list below.`,
+      });
+      await fetchAllData();
     } catch (err) {
-      alert('Upload failed');
+      const msg = err.response?.data?.error || err.message || 'Upload failed';
+      setMaterialNotice({ variant: 'danger', text: msg });
+    } finally {
+      setMaterialUploading(false);
     }
   };
 
   const handleSubmitAssignment = async (e) => {
     e.preventDefault();
+    if (!submitFile || !selectedAssignment?._id) {
+      alert('Please select a file to submit.');
+      return;
+    }
     const formData = new FormData();
     formData.append('assignmentId', selectedAssignment._id);
     formData.append('file', submitFile);
@@ -103,10 +134,7 @@ const CourseDetails = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(`${API_BASE}/api/assignments/submit`, formData, {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
+        headers: { Authorization: `Bearer ${token}` },
       });
       setShowSubmit(false);
       alert('Assignment submitted successfully!');
@@ -116,10 +144,17 @@ const CourseDetails = () => {
   };
 
   const getIcon = (type) => {
-    switch(type) {
-      case 'PDF': return <PictureAsPdf color="error" />;
-      case 'Video': return <Movie color="primary" />;
-      default: return <Description color="action" />;
+    switch (type) {
+      case 'PDF':
+        return <PictureAsPdf color="error" />;
+      case 'Video':
+        return <Movie color="primary" />;
+      case 'Notes':
+      case 'DOCX':
+      case 'PPT':
+        return <Description color="action" />;
+      default:
+        return <Description color="action" />;
     }
   };
 
@@ -130,10 +165,20 @@ const CourseDetails = () => {
           <Tab label="Materials" />
           <Tab label="Quizzes" />
           <Tab label="Assignments" />
-          {user.role !== 'Student' && <Tab label="Feedback Analysis" />}
+          {userRole && userRole !== 'Student' && <Tab label="Feedback Analysis" />}
         </Tabs>
       </Box>
 
+      {materialNotice && (
+        <Alert
+          variant={materialNotice.variant === 'success' ? 'success' : 'danger'}
+          dismissible
+          onClose={() => setMaterialNotice(null)}
+          className="mb-3"
+        >
+          {materialNotice.text}
+        </Alert>
+      )}
       {loading ? (
         <div className="text-center py-5"><Spinner animation="border" /></div>
       ) : (
@@ -143,8 +188,15 @@ const CourseDetails = () => {
               <Card className="shadow-sm border-0" style={{ borderRadius: '15px' }}>
                 <Card.Header className="bg-white border-0 d-flex justify-content-between align-items-center py-3">
                   <Typography variant="h6">Course Materials</Typography>
-                  {(user.role !== 'Student') && (
-                    <Button variant="outline-primary" size="sm" onClick={() => setShowUpload(true)}>
+                  {(userRole && userRole !== 'Student') && (
+                    <Button
+                      variant="outline-primary"
+                      size="sm"
+                      onClick={() => {
+                        setMaterialNotice(null);
+                        setShowUpload(true);
+                      }}
+                    >
                       <UploadFile /> Add Material
                     </Button>
                   )}
@@ -176,7 +228,7 @@ const CourseDetails = () => {
               <Card className="shadow-sm border-0" style={{ borderRadius: '15px' }}>
                 <Card.Header className="bg-white border-0 d-flex justify-content-between align-items-center py-3">
                   <Typography variant="h6">Interactive Quizzes</Typography>
-                  {(user.role !== 'Student') && (
+                  {(userRole && userRole !== 'Student') && (
                     <Button variant="outline-primary" size="sm" onClick={() => navigate(`/courses/${id}/create-quiz`)}>
                       <QuizIcon /> Create Quiz
                     </Button>
@@ -198,14 +250,14 @@ const CourseDetails = () => {
                             <Typography variant="caption" color="textSecondary">{q.timeLimit} mins</Typography>
                           </div>
                         </div>
-                        {user.role === 'Student' && (
+                        {userRole === 'Student' && (
                           q.isCompleted ? (
                             <Button variant="outline-success" size="sm" onClick={() => navigate(`/quiz-review/${q.resultId}`)}>View Review</Button>
                           ) : (
                             <Button variant="primary" size="sm" onClick={() => navigate(`/quizzes/${q._id}`)}>Take Quiz</Button>
                           )
                         )}
-                        {user.role !== 'Student' && (
+                        {userRole && userRole !== 'Student' && (
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <Button 
                               variant="outline-primary" 
@@ -228,7 +280,7 @@ const CourseDetails = () => {
               <Card className="shadow-sm border-0" style={{ borderRadius: '15px' }}>
                 <Card.Header className="bg-white border-0 d-flex justify-content-between align-items-center py-3">
                   <Typography variant="h6">Assignments</Typography>
-                  {(user.role !== 'Student') && (
+                  {(userRole && userRole !== 'Student') && (
                     <Button variant="outline-primary" size="sm" onClick={() => navigate(`/courses/${id}/create-assignment`)}>
                       <AssignmentIcon /> Post Assignment
                     </Button>
@@ -256,7 +308,7 @@ const CourseDetails = () => {
                               <Download sx={{ fontSize: 16, mr: 1 }} /> Reference
                             </Button>
                           )}
-                          {user.role === 'Student' && (
+                          {userRole === 'Student' && (
                             <Button 
                               variant="success" 
                               size="sm" 
@@ -273,7 +325,7 @@ const CourseDetails = () => {
               </Card>
             )}
 
-            {activeTab === 3 && user.role !== 'Student' && (
+            {activeTab === 3 && userRole && userRole !== 'Student' && (
               <Card className="shadow-sm border-0" style={{ borderRadius: '15px' }}>
                 <Card.Header className="bg-white border-0 py-3">
                   <Typography variant="h6">Student Feedback & Ratings</Typography>
@@ -303,7 +355,7 @@ const CourseDetails = () => {
           </Col>
 
           <Col md={4}>
-            {user.role !== 'Student' && feedbacks.length > 0 && (
+            {userRole && userRole !== 'Student' && feedbacks.length > 0 && (
               <Paper elevation={0} sx={{ p: 3, borderRadius: 4, bgcolor: '#eef2ff', border: '1px solid #c7d2fe', mb: 3 }}>
                 <Typography variant="subtitle2" color="primary" sx={{ fontWeight: 'bold', mb: 1 }}>COURSE RATING</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -317,7 +369,7 @@ const CourseDetails = () => {
                 </Box>
               </Paper>
             )}
-            {user.role === 'Student' && course && (
+            {userRole === 'Student' && course && (
               <Box sx={{ mb: 4 }}>
                 <FeedbackForm 
                   courseId={id} 
@@ -349,17 +401,27 @@ const CourseDetails = () => {
       )}
 
       {/* Upload Modal for Materials */}
-      <Modal show={showUpload} onHide={() => setShowUpload(false)} centered>
-        <Modal.Header closeButton><Modal.Title>Upload Material</Modal.Title></Modal.Header>
+      <Modal show={showUpload} onHide={() => !materialUploading && setShowUpload(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Upload Material</Modal.Title>
+        </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleUpload}>
             <Form.Group className="mb-3">
               <Form.Label>Title</Form.Label>
-              <Form.Control type="text" onChange={(e) => setUploadData({...uploadData, title: e.target.value})} required />
+              <Form.Control
+                type="text"
+                value={uploadData.title}
+                onChange={(e) => setUploadData({ ...uploadData, title: e.target.value })}
+                required
+              />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Type</Form.Label>
-              <Form.Select onChange={(e) => setUploadData({...uploadData, type: e.target.value})}>
+              <Form.Select
+                value={uploadData.type}
+                onChange={(e) => setUploadData({ ...uploadData, type: e.target.value })}
+              >
                 <option value="PDF">PDF</option>
                 <option value="Video">Video</option>
                 <option value="PPT">PPT</option>
@@ -368,9 +430,23 @@ const CourseDetails = () => {
             </Form.Group>
             <Form.Group className="mb-4">
               <Form.Label>Select File</Form.Label>
-              <Form.Control type="file" onChange={(e) => setUploadData({...uploadData, file: e.target.files[0]})} required />
+              <Form.Control
+                type="file"
+                key={showUpload ? 'upload-open' : 'upload-closed'}
+                onChange={(e) => setUploadData({ ...uploadData, file: e.target.files?.[0] || null })}
+                required
+              />
             </Form.Group>
-            <Button variant="primary" type="submit" className="w-100 py-2">Start Upload</Button>
+            <Button variant="primary" type="submit" className="w-100 py-2" disabled={materialUploading}>
+              {materialUploading ? (
+                <>
+                  <Spinner animation="border" size="sm" className="me-2" />
+                  Uploading…
+                </>
+              ) : (
+                'Start Upload'
+              )}
+            </Button>
           </Form>
         </Modal.Body>
       </Modal>
