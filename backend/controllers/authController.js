@@ -10,7 +10,7 @@ const register = async (req, res) => {
     
     // Trim inputs
     const trimmedEmail = email?.trim().toLowerCase();
-    const trimmedRegNo = registeredNumber?.trim();
+    const trimmedRegNo = registeredNumber?.trim() || undefined;
 
     // Check if email already exists
     const existingEmail = await User.findOne({ email: trimmedEmail });

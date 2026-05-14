@@ -63,9 +63,8 @@ async function seed() {
 
     let dolly = await User.findOne({
       $or: [
-        { email: { $regex: /^dolly/i } },
-        { name: { $regex: /dolly/i } },
-        { registeredNumber: { $regex: /^FAC_DOLLY$/i } },
+        { email: 'dolly.faculty@lms.com' },
+        { registeredNumber: 'FAC_DOLLY' },
       ],
     });
 
