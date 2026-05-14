@@ -98,8 +98,19 @@ const Dashboard = () => {
           <Typography variant="overline" sx={{ color: 'primary.main', fontWeight: 800, letterSpacing: '0.12em' }}>
             Dashboard
           </Typography>
-          <Typography variant="h4" sx={{ fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
-            Hello, {user.name}!
+          <Typography variant="h4" sx={{ 
+            fontWeight: 900, 
+            color: '#0f172a', 
+            letterSpacing: '-0.03em',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1.5
+          }}>
+            Hello, <Box component="span" sx={{ 
+              background: 'linear-gradient(90deg, #4f46e5 0%, #9333ea 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}>{user.name}</Box>! 👋
           </Typography>
           <Typography variant="body1" sx={{ color: 'text.secondary', mt: 0.5, fontWeight: 500 }}>
             {user.role === 'Student'
@@ -171,9 +182,98 @@ const Dashboard = () => {
         <Box sx={{ position: 'absolute', bottom: '-20%', right: '-5%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(168,85,247,0.3) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(30px)', pointerEvents: 'none' }} />
       </Box>
 
-      <Typography variant="h5" sx={{ fontWeight: 800, color: '#0f172a', mb: 3, px: 1 }}>
-        Dashboard Overview
-      </Typography>
+      {/* Stats Section with Special Heading */}
+      <Box sx={{ mb: 3, mt: 2, px: 1, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Box sx={{ p: 1, borderRadius: 2, bgcolor: 'primary.main', color: 'white', display: 'flex' }}>
+          <Assessment fontSize="small" />
+        </Box>
+        <Typography variant="h5" sx={{ 
+          fontWeight: 900, 
+          background: 'linear-gradient(90deg, #0f172a 0%, #4f46e5 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          letterSpacing: '-0.01em'
+        }}>
+          Key Performance Metrics
+        </Typography>
+      </Box>
+
+      <Row className="mb-5 g-3">
+        {stats.map((stat, index) => (
+          <Col md={3} sm={6} key={index}>
+            <Paper
+              className="stat-tile"
+              elevation={0}
+              onClick={() => navigate(stat.path)}
+              sx={{
+                p: 2.5,
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'pointer',
+                borderRadius: '22px',
+                border: '1px solid rgba(15, 23, 42, 0.08)',
+                bgcolor: 'background.paper',
+                boxShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                position: 'relative',
+                overflow: 'hidden',
+                '&:hover': {
+                  transform: 'translateY(-6px)',
+                  boxShadow: '0 20px 40px rgba(15, 23, 42, 0.12)',
+                  borderColor: stat.color,
+                },
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: 6,
+                  bgcolor: stat.color,
+                  borderRadius: '4px 0 0 4px',
+                },
+              }}
+            >
+              <IconButton
+                sx={{
+                  bgcolor: `${stat.color}15`,
+                  color: stat.color,
+                  mr: 2,
+                  width: 48,
+                  height: 48,
+                  '&:hover': { bgcolor: `${stat.color}25` },
+                }}
+              >
+                {stat.icon}
+              </IconButton>
+              <Box sx={{ position: 'relative', zIndex: 1 }}>
+                <Typography variant="h4" sx={{ fontWeight: 900, lineHeight: 1, color: '#0f172a' }}>
+                  {stat.count}
+                </Typography>
+                <Typography variant="body2" sx={{ fontWeight: 700, color: 'text.secondary', mt: 0.5, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  {stat.title}
+                </Typography>
+              </Box>
+            </Paper>
+          </Col>
+        ))}
+      </Row>
+
+      {/* Module/Action Section with Special Heading */}
+      <Box sx={{ mb: 3, px: 1, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Box sx={{ p: 1, borderRadius: 2, bgcolor: 'secondary.main', color: 'white', display: 'flex' }}>
+          <EmojiEvents fontSize="small" />
+        </Box>
+        <Typography variant="h5" sx={{ 
+          fontWeight: 900, 
+          background: 'linear-gradient(90deg, #0f172a 0%, #9333ea 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          letterSpacing: '-0.01em'
+        }}>
+          {user.role === 'Student' ? 'Your Learning Path' : 'Faculty Management Hub'}
+        </Typography>
+      </Box>
 
       {error && <Alert variant="danger" className="shadow-sm">{error}</Alert>}
 
@@ -349,63 +449,6 @@ const Dashboard = () => {
         </Row>
       )}
 
-      <Row className="mb-5 g-3">
-        {stats.map((stat, index) => (
-          <Col md={3} sm={6} key={index}>
-            <Paper
-              className="stat-tile"
-              elevation={0}
-              onClick={() => navigate(stat.path)}
-              sx={{
-                p: 2.5,
-                display: 'flex',
-                alignItems: 'center',
-                cursor: 'pointer',
-                borderRadius: '18px',
-                border: '1px solid rgba(15, 23, 42, 0.06)',
-                bgcolor: 'background.paper',
-                boxShadow: '0 4px 20px rgba(15, 23, 42, 0.06)',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                position: 'relative',
-                overflow: 'hidden',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: '0 16px 40px rgba(15, 23, 42, 0.12)',
-                },
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: 5,
-                  bgcolor: stat.color,
-                  borderRadius: '4px 0 0 4px',
-                },
-              }}
-            >
-              <IconButton
-                sx={{
-                  bgcolor: `${stat.color}18`,
-                  color: stat.color,
-                  mr: 2,
-                  '&:hover': { bgcolor: `${stat.color}28` },
-                }}
-              >
-                {stat.icon}
-              </IconButton>
-              <Box sx={{ position: 'relative', zIndex: 1 }}>
-                <Typography variant="h5" sx={{ fontWeight: 800, lineHeight: 1.1 }}>
-                  {stat.count}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>
-                  {stat.title}
-                </Typography>
-              </Box>
-            </Paper>
-          </Col>
-        ))}
-      </Row>
     </Container>
   );
 };
