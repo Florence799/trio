@@ -6,10 +6,12 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// CORS: allowed browser origins (edit this list when you add new frontend URLs).
+// CORS: explicit origins + any Cloudflare Pages preview/production (*.pages.dev).
 const ALLOWED_FRONTEND_ORIGINS = [
   'http://localhost:5173',
+  'http://127.0.0.1:5173',
   'https://lms-8kf.pages.dev',
+  'https://lms.pages.dev',
 ];
 
 function normalizeOrigin(s) {
@@ -26,7 +28,17 @@ const allowedOrigins = new Set(
 
 function isOriginAllowed(origin) {
   const o = normalizeOrigin(origin);
-  return o && allowedOrigins.has(o);
+  if (!o) return false;
+  if (allowedOrigins.has(o)) return true;
+  try {
+    const { protocol, hostname } = new URL(o);
+    if (protocol === 'https:' && hostname.endsWith('.pages.dev')) {
+      return true;
+    }
+  } catch {
+    return false;
+  }
+  return false;
 }
 
 // Middleware

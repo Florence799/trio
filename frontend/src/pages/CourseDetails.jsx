@@ -114,7 +114,12 @@ const CourseDetails = () => {
       });
       await fetchAllData();
     } catch (err) {
-      const msg = err.response?.data?.error || err.message || 'Upload failed';
+      let msg = err.response?.data?.error;
+      if (!msg && (err.code === 'ERR_NETWORK' || err.message === 'Network Error')) {
+        msg =
+          'Could not reach the server (often a CORS or network issue). If you changed your Pages URL, the API must allow that origin.';
+      }
+      if (!msg) msg = err.message || 'Upload failed';
       setMaterialNotice({ variant: 'danger', text: msg });
     } finally {
       setMaterialUploading(false);
