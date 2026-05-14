@@ -55,15 +55,15 @@ const Dashboard = () => {
   }, []);
 
   const stats = user.role === 'Student' ? [
-    { title: 'My Courses', count: coursesCount, icon: <School />, color: '#4caf50', path: '/my-courses' },
-    { title: 'Assignments', count: assignmentsCount, icon: <Assignment />, color: '#ff9800', path: '/assignments' },
-    { title: 'Quizzes', count: quizzesCount, icon: <Book />, color: '#2196f3', path: '/quizzes' },
-    { title: 'Performance', count: 'View', icon: <Assessment />, color: '#9c27b0', path: '/performance' },
+    { title: 'My Courses', count: coursesCount, icon: <School />, color: '#6366f1', path: '/my-courses' }, // Indigo
+    { title: 'Assignments', count: assignmentsCount, icon: <Assignment />, color: '#ec4899', path: '/assignments' }, // Pink
+    { title: 'Quizzes', count: quizzesCount, icon: <Book />, color: '#8b5cf6', path: '/quizzes' }, // Violet
+    { title: 'Performance', count: 'View', icon: <Assessment />, color: '#10b981', path: '/performance' }, // Emerald
   ] : [
-    { title: 'My Courses', count: coursesCount, icon: <School />, color: '#4caf50', path: '/my-courses' },
-    { title: 'Assignments', count: assignmentsCount, icon: <Assignment />, color: '#ff9800', path: '/assignments' },
-    { title: 'Quizzes', count: quizzesCount, icon: <Book />, color: '#2196f3', path: '/quizzes' },
-    { title: 'Registered Users', count: userStats.totalUsers, icon: <People />, color: '#f44336', path: '/registered-users' },
+    { title: 'My Courses', count: coursesCount, icon: <School />, color: '#6366f1', path: '/my-courses' },
+    { title: 'Assignments', count: assignmentsCount, icon: <Assignment />, color: '#ec4899', path: '/assignments' },
+    { title: 'Quizzes', count: quizzesCount, icon: <Book />, color: '#8b5cf6', path: '/quizzes' },
+    { title: 'Registered Users', count: userStats.totalUsers, icon: <People />, color: '#f59e0b', path: '/registered-users' }, // Amber
   ];
 
   if (loading) {
@@ -84,14 +84,15 @@ const Dashboard = () => {
           mb: 4,
           p: { xs: 2.5, md: 3 },
           borderRadius: 4,
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(241,245,249,0.9) 100%)',
-          border: '1px solid rgba(15, 23, 42, 0.06)',
-          boxShadow: '0 4px 24px rgba(15, 23, 42, 0.06)',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.95) 100%)',
+          border: '1px solid rgba(15, 23, 42, 0.08)',
+          boxShadow: '0 10px 30px rgba(15, 23, 42, 0.04)',
           display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'space-between',
           alignItems: 'center',
           gap: 2,
+          backdropFilter: 'blur(10px)',
         }}
       >
         <Box>
@@ -142,13 +143,14 @@ const Dashboard = () => {
         sx={{ 
           mb: 5, 
           p: { xs: 4, md: 6 }, 
-          borderRadius: 4, 
-          background: 'linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(49,46,129,0.95) 100%)',
+          borderRadius: 5, 
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%)',
           color: 'white',
           textAlign: 'center',
-          boxShadow: '0 20px 40px rgba(15, 23, 42, 0.2)',
+          boxShadow: '0 25px 50px -12px rgba(15, 23, 42, 0.5)',
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          border: '1px solid rgba(255,255,255,0.1)',
         }}
       >
         <Box sx={{ position: 'relative', zIndex: 1 }}>
