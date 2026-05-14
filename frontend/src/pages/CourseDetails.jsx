@@ -21,6 +21,7 @@ const CourseDetails = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [assignments, setAssignments] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
+  const [registeredStudents, setRegisteredStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   
   const [showUpload, setShowUpload] = useState(false);
@@ -65,6 +66,7 @@ const CourseDetails = () => {
       
       if (userRole && userRole !== 'Student' && userId) {
         requests.push(axios.get(`${API_BASE}/api/feedback/teacher/${userId}`, { headers }));
+        requests.push(axios.get(`${API_BASE}/api/courses/${id}/students`, { headers }));
       }
 
       const results = await Promise.all(requests);
@@ -76,8 +78,12 @@ const CourseDetails = () => {
       if (userRole && userRole !== 'Student' && results[4]) {
         const courseFeedback = results[4].data.filter(f => f.course?._id === id || f.course === id);
         setFeedbacks(courseFeedback);
+        if (results[5]) {
+          setRegisteredStudents(results[5].data.students || []);
+        }
       } else {
         setFeedbacks([]);
+        setRegisteredStudents([]);
       }
     } catch (err) {
       console.error(err);
@@ -171,6 +177,7 @@ const CourseDetails = () => {
           <Tab label="Quizzes" />
           <Tab label="Assignments" />
           {userRole && userRole !== 'Student' && <Tab label="Feedback Analysis" />}
+          {userRole && userRole !== 'Student' && <Tab label="Registered Students" />}
         </Tabs>
       </Box>
 
@@ -219,7 +226,7 @@ const CourseDetails = () => {
                             <Typography variant="caption" color="textSecondary">{m.type} • {new Date(m.createdAt).toLocaleDateString()}</Typography>
                           </div>
                         </div>
-                        <IconButton href={`${API_BASE}${m.fileUrl}`} target="_blank">
+                        <IconButton href={`${API_BASE}${m.fileUrl}`} target="_blank" download>
                           <Download />
                         </IconButton>
                       </ListGroup.Item>
@@ -351,6 +358,35 @@ const CourseDetails = () => {
                         <Typography variant="caption" color="textSecondary" sx={{ mt: 1, display: 'block' }}>
                           Submitted on {new Date(f.createdAt).toLocaleDateString()}
                         </Typography>
+                      </ListGroup.Item>
+                    ))
+                  )}
+                </ListGroup>
+              </Card>
+            )}
+
+            {activeTab === 4 && userRole && userRole !== 'Student' && (
+              <Card className="shadow-sm border-0" style={{ borderRadius: '15px' }}>
+                <Card.Header className="bg-white border-0 py-3">
+                  <Typography variant="h6">Registered Students</Typography>
+                </Card.Header>
+                <ListGroup variant="flush">
+                  {registeredStudents.length === 0 ? (
+                    <ListGroup.Item className="py-5 text-center text-muted">No students are currently registered for this course.</ListGroup.Item>
+                  ) : (
+                    registeredStudents.map((s) => (
+                      <ListGroup.Item key={s._id} className="py-3 d-flex justify-content-between align-items-center">
+                        <div>
+                          <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>{s.name}</Typography>
+                          <Typography variant="body2" color="textSecondary">{s.email}</Typography>
+                          <Box sx={{ mt: 1 }}>
+                            <Badge bg="info" className="me-2">{s.registeredNumber || 'N/A'}</Badge>
+                            <Badge bg="secondary">{s.department} - Year {s.year} ({s.section})</Badge>
+                          </Box>
+                        </div>
+                        {s.mobile && (
+                          <Typography variant="body2" color="primary">📞 {s.mobile}</Typography>
+                        )}
                       </ListGroup.Item>
                     ))
                   )}
