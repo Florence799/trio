@@ -49,12 +49,26 @@ const getCourses = async (req, res) => {
 
 const uploadMaterial = async (req, res) => {
   try {
+    if (!req.file) {
+      return res.status(400).send({ error: 'No file received. Choose a file and try again.' });
+    }
     const { title, type, courseId } = req.body;
+    if (!title || !type || !courseId) {
+      return res.status(400).send({ error: 'Title, type, and course are required.' });
+    }
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).send({ error: 'Course not found.' });
+    }
+    const isOwner = course.teacher.toString() === req.user.id.toString();
+    if (req.user.role !== 'Admin' && !isOwner) {
+      return res.status(403).send({ error: 'You can only upload materials to your own courses.' });
+    }
     const material = new Material({
       title,
       type,
       course: courseId,
-      fileUrl: `/uploads/${req.file.filename}`
+      fileUrl: `/uploads/${req.file.filename}`,
     });
     await material.save();
     res.status(201).send(material);

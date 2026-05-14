@@ -27,10 +27,9 @@ const CreateAssignment = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(`${API_BASE}/api/assignments`, formData, {
-        headers: { 
+        headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
+        },
       });
       navigate(`/courses/${courseId}`);
     } catch (err) {

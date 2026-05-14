@@ -13,7 +13,7 @@ const materialSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['PDF', 'Video', 'DOCX', 'PPT'],
+    enum: ['PDF', 'Video', 'DOCX', 'PPT', 'Notes'],
     required: true,
   },
 }, { timestamps: true });
