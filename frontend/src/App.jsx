@@ -25,6 +25,7 @@ import MyCourses from './pages/MyCourses';
 import AssignmentsPage from './pages/AssignmentsPage';
 import QuizzesPage from './pages/QuizzesPage';
 import RegisteredUsers from './pages/RegisteredUsers';
+import CustomCursor from './components/CustomCursor';
 
 function App() {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -37,6 +38,7 @@ function App() {
 
   return (
     <Router>
+      <CustomCursor />
       <Box className="app-shell" sx={{ flexGrow: 1, minHeight: '100vh', pt: { xs: 2, md: 2.5 } }}>
         <Navbar expand="lg" sticky="top" className="lms-navbar mb-0 py-0">
           <Container>
