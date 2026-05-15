@@ -226,33 +226,29 @@ const Login = () => {
         position: 'relative',
         display: isMobile ? 'none' : 'flex',
         alignItems: 'center',
-        justifyContent: 'center', // Center vertically
+        justifyContent: 'center',
         backgroundImage: `url(${campusBg})`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(255, 255, 255, 0.1)',
-        }
+        backgroundPosition: 'center 30%', // Focused on the building
+        backgroundRepeat: 'no-repeat',
       }}>
         <Box sx={{ 
           position: 'absolute',
-          top: '25%',
-          right: '8%',
+          top: '15%',
+          right: '5%',
           zIndex: 1, 
           textAlign: 'right', 
           animation: 'fadeInRight 1s ease-out' 
         }}>
           <Typography variant="h1" sx={{ 
-            color: '#0D1B3E', 
+            color: 'white', 
             fontWeight: 800, 
             fontSize: { md: '3.5rem', lg: '4.5rem' }, 
             lineHeight: 1,
             letterSpacing: '-0.01em',
             maxWidth: '600px',
-            fontFamily: "'Poppins', sans-serif"
+            fontFamily: "'Poppins', sans-serif",
+            textShadow: '0 4px 15px rgba(0,0,0,0.5)'
           }}>
             Learning and <br /> Academic Support
           </Typography>
