@@ -1,245 +1,286 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { Box, Typography, Button, Chip, Stack, Avatar, AvatarGroup } from '@mui/material';
+import { Container, Row, Col, Navbar, Nav, Button, Card, Badge, Stack } from 'react-bootstrap';
+import { Box, Typography, Avatar, LinearProgress, useMediaQuery, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
-import AutoStories from '@mui/icons-material/AutoStories';
-import TrendingUp from '@mui/icons-material/TrendingUp';
-import Security from '@mui/icons-material/Security';
-import School from '@mui/icons-material/School';
-import RocketLaunch from '@mui/icons-material/RocketLaunch';
-import Groups from '@mui/icons-material/Groups';
 import axios from 'axios';
 import { API_BASE } from '../config';
 
 const Home = () => {
   const [materialTotal, setMaterialTotal] = useState(null);
-  const [materialStatsError, setMaterialStatsError] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
-    let cancelled = false;
-    axios
-      .get(`${API_BASE}/api/public/material-stats`)
-      .then((res) => {
-        if (!cancelled && typeof res.data?.totalMaterials === 'number') {
-          setMaterialTotal(res.data.totalMaterials);
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setMaterialStatsError(true);
-      });
-    return () => {
-      cancelled = true;
-    };
+    axios.get(`${API_BASE}/api/public/material-stats`)
+      .then(res => setMaterialTotal(res.data.totalMaterials))
+      .catch(() => {});
   }, []);
 
+  const features = [
+    { icon: 'bi-lightbulb', title: 'Smart Learning', desc: 'Personalized learning paths tailored to your pace.' },
+    { icon: 'bi-cpu', title: 'AI Recommendations', desc: 'Get content suggestions based on your interests.' },
+    { icon: 'bi-graph-up-arrow', title: 'Live Progress', desc: 'Track your growth with real-time analytics.' },
+    { icon: 'bi-journal-check', title: 'Online Assessments', desc: 'Interactive quizzes and automated grading.' },
+    { icon: 'bi-patch-check', title: 'Certificates & Badges', desc: 'Earn recognized credentials as you learn.' },
+    { icon: 'bi-shield-check', title: 'Plagiarism Detection', desc: 'Advanced AI audit for academic integrity.' }
+  ];
+
+  const courses = [
+    { title: 'ReactJS Mastery', level: 'Intermediate', progress: 75, color: '#61DAFB' },
+    { title: 'NodeJS Backend', level: 'Advanced', progress: 40, color: '#339933' },
+    { title: 'Python for AI', level: 'Beginner', progress: 90, color: '#3776AB' },
+    { title: 'Data Science', level: 'Expert', progress: 20, color: '#F7931E' },
+    { title: 'UI/UX Design', level: 'Beginner', progress: 65, color: '#EA4335' }
+  ];
+
   return (
-    <Box className="hero-page" sx={{ position: 'relative', overflow: 'hidden', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
-      {/* Animated Mesh Gradient Background */}
+    <Box sx={{ bgcolor: '#F8FAFC', minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
+      
+      {/* Floating Gradient Blobs */}
       <Box sx={{
         position: 'absolute',
-        inset: 0,
+        top: '-10%',
+        right: '-5%',
+        width: '40vw',
+        height: '40vw',
+        background: 'radial-gradient(circle, rgba(20, 184, 166, 0.1) 0%, transparent 70%)',
         zIndex: 0,
-        background: 'radial-gradient(circle at 0% 0%, #0f172a 0%, transparent 50%), radial-gradient(circle at 100% 100%, #1e1b4b 0%, transparent 50%), radial-gradient(circle at 50% 50%, #312e81 0%, #0f172a 100%)',
-        '&::after': {
-          content: '""',
-          position: 'absolute',
-          top: '-50%',
-          left: '-50%',
-          width: '200%',
-          height: '200%',
-          background: 'radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%)',
-          animation: 'meshMove 20s linear infinite',
-        }
+        animation: 'blobFloat 20s infinite linear'
+      }} />
+      <Box sx={{
+        position: 'absolute',
+        bottom: '10%',
+        left: '-5%',
+        width: '30vw',
+        height: '30vw',
+        background: 'radial-gradient(circle, rgba(79, 70, 229, 0.1) 0%, transparent 70%)',
+        zIndex: 0,
+        animation: 'blobFloat 25s infinite linear reverse'
       }} />
 
-      {/* Floating Decorative Elements */}
-      <Box sx={{ position: 'absolute', top: '15%', left: '10%', animation: 'float 6s ease-in-out infinite', opacity: 0.6 }}>
-        <School sx={{ fontSize: 120, color: 'rgba(99, 102, 241, 0.15)' }} />
-      </Box>
-      <Box sx={{ position: 'absolute', bottom: '20%', right: '15%', animation: 'float 8s ease-in-out infinite', opacity: 0.5 }}>
-        <RocketLaunch sx={{ fontSize: 100, color: 'rgba(168, 85, 247, 0.15)' }} />
-      </Box>
-
-      <Container className="position-relative" style={{ zIndex: 1 }}>
-        <Row className="align-items-center">
-          <Col lg={7}>
-            <Stack direction="row" spacing={1} sx={{ mb: 4, flexWrap: 'wrap', gap: 1 }}>
-              <Chip 
-                label="Next-Gen Learning" 
-                sx={{ 
-                  bgcolor: 'rgba(99, 102, 241, 0.15)', 
-                  color: '#818cf8', 
-                  fontWeight: 800, 
-                  fontSize: '0.75rem', 
-                  letterSpacing: 1, 
-                  textTransform: 'uppercase',
-                  border: '1px solid rgba(99, 102, 241, 0.3)',
-                  backdropFilter: 'blur(10px)'
-                }} 
-              />
-              {!materialStatsError && materialTotal !== null && (
-                <Chip 
-                  label={`${materialTotal}+ Learning Assets`} 
-                  sx={{ 
-                    bgcolor: 'rgba(255, 255, 255, 0.05)', 
-                    color: 'white', 
-                    fontWeight: 600, 
-                    fontSize: '0.75rem',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    backdropFilter: 'blur(10px)'
-                  }} 
-                />
-              )}
-            </Stack>
-
-            <Typography
-              variant="h1"
-              sx={{
-                fontWeight: 900,
-                mb: 3,
-                fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.5rem' },
-                lineHeight: 1.05,
-                letterSpacing: '-0.04em',
-                background: 'linear-gradient(to bottom right, #ffffff 30%, #94a3b8 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Elevate your <br />
-              <span style={{ color: '#6366f1', WebkitTextFillColor: '#6366f1' }}>educational journey.</span>
-            </Typography>
-
-            <Typography variant="h6" sx={{ color: '#94a3b8', mb: 5, fontWeight: 400, lineHeight: 1.7, maxWidth: 600, fontSize: '1.15rem' }}>
-              A unified ecosystem for modern educators and ambitious students. 
-              Manage courses, assessments, and feedback in a high-performance environment designed for clarity.
-            </Typography>
-
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2.5}>
-              <Button
-                component={Link}
-                to="/login"
-                variant="contained"
-                sx={{
-                  px: 5,
-                  py: 2,
-                  fontSize: '1rem',
-                  fontWeight: 800,
-                  borderRadius: '16px',
-                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-                  boxShadow: '0 15px 35px rgba(99, 102, 241, 0.4)',
-                  textTransform: 'none',
-                  transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                  '&:hover': {
-                    transform: 'translateY(-4px) scale(1.02)',
-                    boxShadow: '0 20px 45px rgba(99, 102, 241, 0.5)',
-                  }
-                }}
-              >
-                Launch Learning Portal
-              </Button>
-              <Button
-                component={Link}
-                to="/register"
-                variant="text"
-                sx={{
-                  px: 4,
-                  py: 2,
-                  fontSize: '1rem',
-                  fontWeight: 700,
-                  color: 'white',
-                  textTransform: 'none',
-                  '&:hover': {
-                    bgcolor: 'rgba(255,255,255,0.05)',
-                    color: '#818cf8'
-                  },
-                }}
-              >
-                Create New Account
-              </Button>
-            </Stack>
-
-            <Box sx={{ mt: 8, display: 'flex', alignItems: 'center', gap: 2 }}>
-              <AvatarGroup max={4}>
-                <Avatar alt="Student 1" src="https://i.pravatar.cc/150?u=1" sx={{ width: 32, height: 32, border: '2px solid #0f172a !important' }} />
-                <Avatar alt="Student 2" src="https://i.pravatar.cc/150?u=2" sx={{ width: 32, height: 32, border: '2px solid #0f172a !important' }} />
-                <Avatar alt="Student 3" src="https://i.pravatar.cc/150?u=3" sx={{ width: 32, height: 32, border: '2px solid #0f172a !important' }} />
-                <Avatar alt="Student 4" src="https://i.pravatar.cc/150?u=4" sx={{ width: 32, height: 32, border: '2px solid #0f172a !important' }} />
-              </AvatarGroup>
-              <Typography variant="body2" sx={{ color: '#64748b', fontWeight: 600 }}>
-                Joined by <span style={{ color: 'white' }}>500+</span> active learners this week
+      {/* Hero Section */}
+      <section id="home" className="pt-5 mt-5">
+        <Container>
+          <Row className="align-items-center min-vh-75">
+            <Col lg={6} className="position-relative" style={{ zIndex: 1 }}>
+              <Badge bg="transparent" className="mb-3 px-3 py-2 border text-teal" style={{ borderColor: '#14B8A6', color: '#14B8A6', borderRadius: '50px', fontWeight: 600 }}>
+                ✨ Next-Gen Learning Experience
+              </Badge>
+              <Typography variant="h1" sx={{ fontWeight: 800, mb: 3, fontSize: { xs: '2.5rem', md: '4rem' }, color: '#0F172A', lineHeight: 1.1 }}>
+                Learn. Grow. <br />
+                <span style={{ color: '#14B8A6' }}>Succeed Together.</span>
               </Typography>
-            </Box>
-          </Col>
-
-          <Col lg={5} className="d-none d-lg-block">
-            <Box sx={{ 
-              position: 'relative',
-              '&::before': {
-                content: '""',
-                position: 'absolute',
-                top: '-10%',
-                right: '-10%',
-                width: '120%',
-                height: '120%',
-                background: 'radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%)',
-                zIndex: -1
-              }
-            }}>
-              <Box className="floating-card" sx={{ 
-                p: 4, 
-                borderRadius: 8, 
-                bgcolor: 'rgba(255,255,255,0.03)', 
-                backdropFilter: 'blur(30px)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                boxShadow: '0 40px 100px rgba(0,0,0,0.4)',
-              }}>
-                <Stack spacing={3}>
-                  <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    <Box sx={{ p: 1.5, borderRadius: 3, bgcolor: 'rgba(99, 102, 241, 0.1)', color: '#6366f1' }}>
-                      <AutoStories />
-                    </Box>
-                    <Box>
-                      <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 800 }}>Smart Materials</Typography>
-                      <Typography variant="body2" sx={{ color: '#64748b' }}>AI-organized study sets</Typography>
+              <Typography variant="h6" sx={{ color: '#64748B', mb: 4, maxWidth: '500px', fontWeight: 400, lineHeight: 1.6 }}>
+                An AI-powered LMS platform designed for students, teachers, and institutions to excel in the digital age.
+              </Typography>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                <Button 
+                  as={Link} to="/login"
+                  className="px-4 py-3 border-0" 
+                  style={{ background: 'linear-gradient(135deg, #14B8A6 0%, #4F46E5 100%)', borderRadius: '12px', fontWeight: 700, boxShadow: '0 10px 20px rgba(79, 70, 229, 0.2)' }}
+                >
+                  Launch Learning Portal
+                </Button>
+                <Button 
+                  variant="outline-secondary"
+                  className="px-4 py-3" 
+                  style={{ borderRadius: '12px', fontWeight: 600, border: '2px solid #E2E8F0', color: '#64748B' }}
+                >
+                  Explore Courses
+                </Button>
+              </Stack>
+            </Col>
+            <Col lg={6} className="mt-5 mt-lg-0">
+              <Box className="glass-panel p-4" sx={{ borderRadius: '24px', position: 'relative', transition: 'transform 0.5s ease', '&:hover': { transform: 'translateY(-10px)' } }}>
+                {/* Dashboard Preview Mockup */}
+                <Box sx={{ bgcolor: 'white', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.1)' }}>
+                  <Box sx={{ p: 2, borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>Student Workspace</Typography>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#FF5F57' }} />
+                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#FEBC2E' }} />
+                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#28C840' }} />
                     </Box>
                   </Box>
-                  <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    <Box sx={{ p: 1.5, borderRadius: 3, bgcolor: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
-                      <TrendingUp />
-                    </Box>
-                    <Box>
-                      <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 800 }}>Live Performance</Typography>
-                      <Typography variant="body2" sx={{ color: '#64748b' }}>Real-time growth tracking</Typography>
-                    </Box>
+                  <Box sx={{ p: 3 }}>
+                    <Row className="g-3">
+                      <Col xs={12}>
+                        <Box sx={{ p: 2, bgcolor: '#F8FAFC', borderRadius: '12px' }}>
+                          <Typography variant="caption" sx={{ color: '#64748B', fontWeight: 600 }}>CURRENT PROGRESS</Typography>
+                          <Typography variant="h6" sx={{ fontWeight: 800, mt: 0.5 }}>ReactJS Development</Typography>
+                          <LinearProgress variant="determinate" value={65} sx={{ height: 8, borderRadius: 5, mt: 1, bgcolor: '#E2E8F0', '& .MuiLinearProgress-bar': { bgcolor: '#14B8A6' } }} />
+                        </Box>
+                      </Col>
+                      <Col xs={6}>
+                        <Box sx={{ p: 2, bgcolor: '#F0FDF4', borderRadius: '12px', border: '1px solid #DCFCE7' }}>
+                          <Typography variant="h5" sx={{ fontWeight: 800, color: '#166534' }}>12</Typography>
+                          <Typography variant="caption" sx={{ color: '#166534', fontWeight: 600 }}>COMPLETED</Typography>
+                        </Box>
+                      </Col>
+                      <Col xs={6}>
+                        <Box sx={{ p: 2, bgcolor: '#EEF2FF', borderRadius: '12px', border: '1px solid #E0E7FF' }}>
+                          <Typography variant="h5" sx={{ fontWeight: 800, color: '#3730A3' }}>4</Typography>
+                          <Typography variant="caption" sx={{ color: '#3730A3', fontWeight: 600 }}>PENDING</Typography>
+                        </Box>
+                      </Col>
+                    </Row>
                   </Box>
-                  <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    <Box sx={{ p: 1.5, borderRadius: 3, bgcolor: 'rgba(244, 63, 94, 0.1)', color: '#f43f5e' }}>
-                      <Security />
-                    </Box>
-                    <Box>
-                      <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 800 }}>Integrity Check</Typography>
-                      <Typography variant="body2" sx={{ color: '#64748b' }}>Advanced plagiarism audit</Typography>
-                    </Box>
-                  </Box>
-                </Stack>
+                </Box>
+                {/* Floating elements */}
+                <Box sx={{ position: 'absolute', top: '-20px', right: '-20px', bgcolor: '#22C55E', color: 'white', p: 2, borderRadius: '12px', boxShadow: '0 10px 20px rgba(34, 197, 94, 0.3)', animation: 'float 4s infinite ease-in-out' }}>
+                  <i className="bi bi-award-fill fs-4"></i>
+                </Box>
               </Box>
-            </Box>
-          </Col>
-        </Row>
-      </Container>
+            </Col>
+          </Row>
+        </Container>
+      </section>
 
-      {/* Global CSS for unique animations */}
+      {/* Features Section */}
+      <section id="features" className="py-5 my-5">
+        <Container>
+          <div className="text-center mb-5">
+            <Typography variant="overline" sx={{ color: '#14B8A6', fontWeight: 800, letterSpacing: 2 }}>POWERFUL FEATURES</Typography>
+            <Typography variant="h2" sx={{ fontWeight: 800, mb: 2 }}>Why Choose LMS Pro?</Typography>
+            <Typography variant="body1" sx={{ color: '#64748B', maxWidth: '600px', mx: 'auto' }}>
+              Built with cutting-edge AI to provide a seamless learning experience for everyone.
+            </Typography>
+          </div>
+          <Row className="g-4">
+            {features.map((f, i) => (
+              <Col md={4} key={i}>
+                <Box className="glass-panel h-100 p-4" sx={{ borderRadius: '20px', transition: 'all 0.3s ease', '&:hover': { transform: 'translateY(-5px)', bgcolor: 'white', boxShadow: '0 20px 40px rgba(0,0,0,0.08)' } }}>
+                  <Box sx={{ width: 50, height: 50, borderRadius: '12px', bgcolor: 'rgba(20, 184, 166, 0.1)', color: '#14B8A6', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 3 }}>
+                    <i className={`bi ${f.icon} fs-3`}></i>
+                  </Box>
+                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 2 }}>{f.title}</Typography>
+                  <Typography variant="body2" sx={{ color: '#64748B', lineHeight: 1.6 }}>{f.desc}</Typography>
+                </Box>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </section>
+
+      {/* Dashboard Preview Section */}
+      <section className="py-5" style={{ background: 'rgba(79, 70, 229, 0.02)' }}>
+        <Container>
+          <Row className="align-items-center g-5">
+            <Col lg={5}>
+              <Typography variant="overline" sx={{ color: '#4F46E5', fontWeight: 800, letterSpacing: 2 }}>STUDENT DASHBOARD</Typography>
+              <Typography variant="h2" sx={{ fontWeight: 800, mb: 3 }}>Analyze your performance in real-time.</Typography>
+              <Typography variant="body1" sx={{ color: '#64748B', mb: 4, lineHeight: 1.7 }}>
+                Get deep insights into your learning habits. Our AI analyzes your quiz attempts and assignment submissions to give you the best path forward.
+              </Typography>
+              <ul className="list-unstyled">
+                {['Interactive Progress Charts', 'Upcoming Class Reminders', 'Detailed Quiz Analytics'].map((item, i) => (
+                  <li key={i} className="mb-3 d-flex align-items-center">
+                    <i className="bi bi-check-circle-fill text-teal me-2" style={{ color: '#14B8A6' }}></i>
+                    <Typography variant="body1" sx={{ fontWeight: 600 }}>{item}</Typography>
+                  </li>
+                ))}
+              </ul>
+            </Col>
+            <Col lg={7}>
+              <Box className="glass-panel p-2 p-md-4" sx={{ borderRadius: '32px' }}>
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000" alt="Dashboard" className="img-fluid rounded-4 shadow-lg" />
+              </Box>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      {/* Courses Section */}
+      <section id="courses" className="py-5 my-5">
+        <Container>
+          <div className="d-flex justify-content-between align-items-end mb-5 flex-wrap gap-3">
+            <div>
+              <Typography variant="overline" sx={{ color: '#14B8A6', fontWeight: 800, letterSpacing: 2 }}>CURATED CATALOG</Typography>
+              <Typography variant="h2" sx={{ fontWeight: 800 }}>Explore Popular Courses</Typography>
+            </div>
+            <Button variant="link" className="text-decoration-none fw-bold" style={{ color: '#4F46E5' }}>View All Courses →</Button>
+          </div>
+          <Row className="g-4">
+            {courses.map((c, i) => (
+              <Col lg={4} md={6} key={i}>
+                <Card className="glass-panel border-0 p-3 h-100" style={{ borderRadius: '24px', transition: 'all 0.3s ease' }}>
+                  <Box sx={{ height: 180, borderRadius: '16px', bgcolor: c.color + '20', mb: 3, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Typography variant="h3" sx={{ color: c.color, fontWeight: 900 }}>{c.title.charAt(0)}</Typography>
+                  </Box>
+                  <Card.Body className="p-0">
+                    <Badge bg="light" className="text-dark mb-2 border">{c.level}</Badge>
+                    <Card.Title className="fw-bold mb-3">{c.title}</Card.Title>
+                    <div className="mb-4">
+                      <div className="d-flex justify-content-between mb-1">
+                        <Typography variant="caption" sx={{ fontWeight: 700 }}>Progress</Typography>
+                        <Typography variant="caption" sx={{ fontWeight: 700 }}>{c.progress}%</Typography>
+                      </div>
+                      <LinearProgress variant="determinate" value={c.progress} sx={{ height: 6, borderRadius: 5, bgcolor: '#F1F5F9', '& .MuiLinearProgress-bar': { bgcolor: c.color } }} />
+                    </div>
+                    <Button className="w-100 border-0 py-2" style={{ background: c.color, borderRadius: '12px', fontWeight: 700 }}>Enroll Now</Button>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-5" style={{ background: '#0F172A', color: '#94A3B8' }}>
+        <Container>
+          <Row className="g-5">
+            <Col lg={4}>
+              <Typography variant="h5" sx={{ color: 'white', fontWeight: 800, mb: 3 }}>LMS Pro</Typography>
+              <Typography variant="body2" sx={{ mb: 4, lineHeight: 1.8 }}>
+                The next generation of AI-powered learning management systems. Helping students and educators succeed together.
+              </Typography>
+              <div className="d-flex gap-3">
+                {['facebook', 'twitter', 'linkedin', 'instagram'].map(s => (
+                  <i key={s} className={`bi bi-${s} fs-5`} style={{ cursor: 'pointer' }}></i>
+                ))}
+              </div>
+            </Col>
+            <Col lg={2} md={4}>
+              <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 700, mb: 3 }}>Company</Typography>
+              <ul className="list-unstyled">
+                {['About Us', 'Careers', 'Blog', 'Contact'].map(l => <li key={l} className="mb-2">{l}</li>)}
+              </ul>
+            </Col>
+            <Col lg={2} md={4}>
+              <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 700, mb: 3 }}>Support</Typography>
+              <ul className="list-unstyled">
+                {['Help Center', 'Privacy Policy', 'Terms', 'Security'].map(l => <li key={l} className="mb-2">{l}</li>)}
+              </ul>
+            </Col>
+            <Col lg={4} md={4}>
+              <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 700, mb: 3 }}>Newsletter</Typography>
+              <Typography variant="body2" sx={{ mb: 3 }}>Subscribe to get latest updates and offers.</Typography>
+              <div className="d-flex gap-2">
+                <input type="email" className="form-control border-0 px-3" placeholder="Enter email" style={{ borderRadius: '10px', background: 'rgba(255,255,255,0.05)', color: 'white' }} />
+                <Button variant="primary" style={{ borderRadius: '10px', bgcolor: '#14B8A6', border: 'none' }}>Join</Button>
+              </div>
+            </Col>
+          </Row>
+          <hr className="my-5" style={{ borderColor: 'rgba(255,255,255,0.1)' }} />
+          <div className="text-center">
+            <Typography variant="caption">© 2026 LMS Pro. All rights reserved.</Typography>
+          </div>
+        </Container>
+      </footer>
+
       <style>{`
-        @keyframes meshMove {
-          0% { transform: translate(-5%, -5%) rotate(0deg); }
-          50% { transform: translate(5%, 5%) rotate(180deg); }
-          100% { transform: translate(-5%, -5%) rotate(360deg); }
+        @keyframes blobFloat {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(50px, -50px) scale(1.1); }
+          66% { transform: translate(-30px, 40px) scale(0.9); }
         }
         @keyframes float {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(5deg); }
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
         }
+        .text-teal { color: #14B8A6 !important; }
+        .min-vh-75 { min-height: 75vh; }
       `}</style>
     </Box>
   );

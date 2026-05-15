@@ -45,53 +45,52 @@ function App() {
           sticky="top" 
           className="lms-navbar"
           style={{
-            margin: '1.5rem auto',
-            maxWidth: '1200px',
-            borderRadius: '24px',
-            width: '95%',
-            top: '1rem',
-            background: 'rgba(255, 255, 255, 0.7)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.4)',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.05)',
-            padding: '0.8rem 1.5rem'
+            background: 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(16px)',
+            borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
+            padding: '1rem 0'
           }}
         >
-          <Container fluid>
-            <Navbar.Brand href="/" className="d-flex align-items-center gap-3 text-decoration-none">
+          <Container>
+            <Navbar.Brand href="/" className="d-flex align-items-center gap-2 text-decoration-none">
               <Box
                 sx={{
-                  background: 'linear-gradient(135deg, #6366f1 0%, #7c3aed 100%)',
-                  p: 1.2,
-                  borderRadius: '16px',
+                  background: 'linear-gradient(135deg, #14B8A6 0%, #4F46E5 100%)',
+                  p: 1,
+                  borderRadius: '12px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 8px 25px rgba(99, 102, 241, 0.4)',
+                  boxShadow: '0 8px 15px rgba(20, 184, 166, 0.25)',
                 }}
               >
                 <School sx={{ color: 'white', fontSize: 24 }} />
               </Box>
-              <Typography variant="h6" sx={{ fontWeight: 900, letterSpacing: '-0.03em', color: '#1e293b' }}>
-                LMS<span style={{ color: '#6366f1' }}>PRO</span>
+              <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: '#0F172A' }}>
+                LMS<span style={{ color: '#14B8A6' }}>Pro</span>
               </Typography>
             </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" sx={{ border: 'none', '&:focus': { boxShadow: 'none' } }} />
+            <Navbar.Toggle aria-controls="basic-navbar-nav" className="border-0 shadow-none" />
             <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="ms-auto align-items-center gap-2">
+              <Nav className="mx-auto align-items-center gap-1 gap-lg-4 mt-3 mt-lg-0">
+                {!user && (
+                  <>
+                    <Nav.Link href="#home" className="px-0 fw-600 text-dark">Home</Nav.Link>
+                    <Nav.Link href="#courses" className="px-0 fw-600 text-dark">Courses</Nav.Link>
+                    <Nav.Link href="#features" className="px-0 fw-600 text-dark">Features</Nav.Link>
+                    <Nav.Link href="#pricing" className="px-0 fw-600 text-dark">Pricing</Nav.Link>
+                    <Nav.Link href="#contact" className="px-0 fw-600 text-dark">Contact</Nav.Link>
+                  </>
+                )}
+              </Nav>
+              <Nav className="align-items-center gap-2 mt-3 mt-lg-0">
                 {user ? (
                   <>
-                    <Nav.Link href="/dashboard" className="px-4 py-2" style={{ fontWeight: 700, borderRadius: '12px' }}>
-                      Dashboard
-                    </Nav.Link>
-                    <Nav.Link href="/performance" className="px-4 py-2" style={{ fontWeight: 700, borderRadius: '12px' }}>
-                      Performance
-                    </Nav.Link>
+                    <Nav.Link href="/dashboard" className="px-3 fw-600 text-dark">Dashboard</Nav.Link>
                     <NavDropdown 
-                      title={<Avatar sx={{ width: 32, height: 32, bgcolor: '#6366f1', fontSize: '0.875rem', fontWeight: 800 }}>{user.name[0]}</Avatar>} 
+                      title={<Avatar sx={{ width: 32, height: 32, bgcolor: '#14B8A6', fontSize: '0.875rem', fontWeight: 800 }}>{user.name[0]}</Avatar>} 
                       id="user-dropdown" 
                       align="end"
-                      className="user-dropdown-custom"
                     >
                       <NavDropdown.Header>
                         <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#1e293b' }}>{user.name}</Typography>
@@ -103,24 +102,22 @@ function App() {
                   </>
                 ) : (
                   <>
-                    <Nav.Link href="/login" className="px-4 py-2" style={{ fontWeight: 700, color: '#64748b' }}>
-                      Login
-                    </Nav.Link>
+                    <Nav.Link href="/login" className="px-3 fw-600 text-dark">Login</Nav.Link>
                     <MuiButton
                       component={RouterLink}
                       to="/register"
                       variant="contained"
                       sx={{
-                        borderRadius: '12px',
+                        borderRadius: '10px',
                         px: 3,
                         py: 1,
-                        fontWeight: 800,
+                        fontWeight: 700,
                         textTransform: 'none',
-                        background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-                        boxShadow: '0 8px 20px rgba(99, 102, 241, 0.25)',
+                        background: 'linear-gradient(135deg, #14B8A6 0%, #4F46E5 100%)',
+                        boxShadow: '0 8px 15px rgba(20, 184, 166, 0.2)',
                       }}
                     >
-                      Join Free
+                      Get Started
                     </MuiButton>
                   </>
                 )}
