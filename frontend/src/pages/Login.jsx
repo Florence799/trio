@@ -113,7 +113,7 @@ const Login = () => {
 
         /* Left Panel */
         .login-left-panel {
-          flex: 0 0 38%;
+          flex: 0 0 36%;
           background: linear-gradient(135deg, #020E2B 0%, #06163A 100%);
           display: flex;
           align-items: center;
@@ -266,6 +266,7 @@ const Login = () => {
           display: flex;
           align-items: center;
           justify-content: center;
+          filter:'brightness(1.02)';
         }
 
         .right-text-content {
