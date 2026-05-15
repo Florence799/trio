@@ -40,61 +40,88 @@ function App() {
     <Router>
       <CustomCursor />
       <Box className="app-shell" sx={{ flexGrow: 1, minHeight: '100vh', pt: { xs: 2, md: 2.5 } }}>
-        <Navbar expand="lg" sticky="top" className="lms-navbar mb-0 py-0">
-          <Container>
-            <Navbar.Brand href="/" className="d-flex align-items-center gap-2 text-decoration-none">
+        <Navbar 
+          expand="lg" 
+          sticky="top" 
+          className="lms-navbar"
+          style={{
+            margin: '1.5rem auto',
+            maxWidth: '1200px',
+            borderRadius: '24px',
+            width: '95%',
+            top: '1rem',
+            background: 'rgba(255, 255, 255, 0.7)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.4)',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.05)',
+            padding: '0.8rem 1.5rem'
+          }}
+        >
+          <Container fluid>
+            <Navbar.Brand href="/" className="d-flex align-items-center gap-3 text-decoration-none">
               <Box
                 sx={{
                   background: 'linear-gradient(135deg, #6366f1 0%, #7c3aed 100%)',
-                  p: 1.1,
-                  borderRadius: 2.5,
+                  p: 1.2,
+                  borderRadius: '16px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 8px 20px rgba(99, 102, 241, 0.45)',
+                  boxShadow: '0 8px 25px rgba(99, 102, 241, 0.4)',
                 }}
               >
-                <School sx={{ color: 'white', fontSize: 26 }} />
+                <School sx={{ color: 'white', fontSize: 24 }} />
               </Box>
-              <Box component="span" sx={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-                <span style={{ fontWeight: 800, letterSpacing: '-0.03em', color: '#0f172a', fontSize: '1.2rem' }}>
-                  LMS Pro
-                </span>
-                <Typography component="span" variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
-                  Learning hub
-                </Typography>
-              </Box>
+              <Typography variant="h6" sx={{ fontWeight: 900, letterSpacing: '-0.03em', color: '#1e293b' }}>
+                LMS<span style={{ color: '#6366f1' }}>PRO</span>
+              </Typography>
             </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Toggle aria-controls="basic-navbar-nav" sx={{ border: 'none', '&:focus': { boxShadow: 'none' } }} />
             <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="ms-auto align-items-center">
+              <Nav className="ms-auto align-items-center gap-2">
                 {user ? (
                   <>
-                    <Nav.Link href="/dashboard" className="px-3">
+                    <Nav.Link href="/dashboard" className="px-4 py-2" style={{ fontWeight: 700, borderRadius: '12px' }}>
                       Dashboard
                     </Nav.Link>
-                    <Nav.Link href="/performance" className="px-3">
+                    <Nav.Link href="/performance" className="px-4 py-2" style={{ fontWeight: 700, borderRadius: '12px' }}>
                       Performance
                     </Nav.Link>
-                    <NavDropdown title={user.name} id="user-dropdown" className="px-3">
-                      <NavDropdown.Item disabled>
-                        <Typography variant="caption" color="textSecondary">
-                          {user.role === 'Teacher' ? 'Faculty' : user.role}{' '}
-                          {user.registeredNumber ? `(${user.registeredNumber})` : ''}
-                        </Typography>
-                      </NavDropdown.Item>
+                    <NavDropdown 
+                      title={<Avatar sx={{ width: 32, height: 32, bgcolor: '#6366f1', fontSize: '0.875rem', fontWeight: 800 }}>{user.name[0]}</Avatar>} 
+                      id="user-dropdown" 
+                      align="end"
+                      className="user-dropdown-custom"
+                    >
+                      <NavDropdown.Header>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#1e293b' }}>{user.name}</Typography>
+                        <Typography variant="caption" sx={{ color: '#64748b' }}>{user.role}</Typography>
+                      </NavDropdown.Header>
                       <NavDropdown.Divider />
-                      <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+                      <NavDropdown.Item onClick={handleLogout} sx={{ color: '#ef4444', fontWeight: 700 }}>Logout</NavDropdown.Item>
                     </NavDropdown>
                   </>
                 ) : (
                   <>
-                    <Nav.Link href="/login" className="px-3">
+                    <Nav.Link href="/login" className="px-4 py-2" style={{ fontWeight: 700, color: '#64748b' }}>
                       Login
                     </Nav.Link>
-                    <Nav.Link href="/register" className="px-3">
-                      Register
-                    </Nav.Link>
+                    <MuiButton
+                      component={RouterLink}
+                      to="/register"
+                      variant="contained"
+                      sx={{
+                        borderRadius: '12px',
+                        px: 3,
+                        py: 1,
+                        fontWeight: 800,
+                        textTransform: 'none',
+                        background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                        boxShadow: '0 8px 20px rgba(99, 102, 241, 0.25)',
+                      }}
+                    >
+                      Join Free
+                    </MuiButton>
                   </>
                 )}
               </Nav>
