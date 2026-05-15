@@ -96,7 +96,16 @@ body {
 
 .hero-page {
   background: linear-gradient(125deg, rgba(15, 23, 42, 0.75) 0%, rgba(49, 46, 129, 0.65) 45%, rgba(88, 28, 135, 0.55) 100%),
-    url("./assets/lms.jpeg") center/cover no-repeat;
+    url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1920&q=80") center/cover no-repeat;
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-reveal {
+  animation: slideUpFade 0.8s ease-out forwards;
 }
 
 .login-page {

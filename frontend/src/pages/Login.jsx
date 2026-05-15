@@ -4,7 +4,7 @@ import axios from 'axios';
 import { API_BASE } from '../config';
 
 // Import official assets
-import campusBg from '../assets/lms.jpeg';
+import campusBg from '../assets/collegeimg.png';
 import logoImg from '../assets/logo.jpeg';
 
 const Login = () => {
@@ -278,11 +278,27 @@ const Login = () => {
         }
 
         .right-text-content h1 {
-          color: #06163A;
+          color: white;
           font-weight: 900;
-          font-size: 4rem;
-          line-height: 1.1;
+          font-size: 4.5rem;
+          line-height: 1;
           letter-spacing: -0.02em;
+          text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+          animation: fadeInScale 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes fadeInScale {
+          from { opacity: 0; transform: scale(0.9) translateX(30px); }
+          to { opacity: 1; transform: scale(1) translateX(0); }
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+
+        .glass-login-card {
+          animation: fadeInLeft 0.8s ease-out, float 6s ease-in-out infinite 0.8s;
         }
 
         @keyframes fadeInLeft {

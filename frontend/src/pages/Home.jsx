@@ -33,7 +33,7 @@ const Home = () => {
     <Box className="hero-page">
       <Box className="hero-overlay" />
       <Container className="py-5 position-relative" style={{ zIndex: 1 }}>
-        <Stack direction="row" spacing={1} sx={{ mb: 3, flexWrap: 'wrap', gap: 1 }}>
+        <Stack className="animate-reveal" direction="row" spacing={1} sx={{ mb: 3, flexWrap: 'wrap', gap: 1 }}>
           <Chip icon={<AutoStories sx={{ color: 'white !important' }} />} label="Courses & materials" sx={{ bgcolor: 'rgba(255,255,255,0.15)', color: 'white', fontWeight: 600, backdropFilter: 'blur(8px)' }} />
           <Chip icon={<TrendingUp sx={{ color: 'white !important' }} />} label="Track progress" sx={{ bgcolor: 'rgba(255,255,255,0.15)', color: 'white', fontWeight: 600, backdropFilter: 'blur(8px)' }} />
           {!materialStatsError && (
@@ -48,7 +48,7 @@ const Home = () => {
             />
           )}
         </Stack>
-        <Box sx={{ maxWidth: 720, py: { xs: 2, md: 4 } }}>
+        <Box className="animate-reveal" sx={{ maxWidth: 720, py: { xs: 2, md: 4 }, animationDelay: '0.2s' }}>
           <Typography
             variant="h2"
             sx={{
@@ -125,7 +125,7 @@ const Home = () => {
         </Box>
 
         {/* New Purpose Section */}
-        <Box sx={{ mt: 10, pt: 8, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+        <Box className="animate-reveal" sx={{ mt: 10, pt: 8, borderTop: '1px solid rgba(255,255,255,0.1)', animationDelay: '0.4s' }}>
           <Typography variant="overline" sx={{ color: '#c4b5fd', fontWeight: 800, letterSpacing: '0.2em' }}>
             Portal Purpose
           </Typography>
