@@ -9,13 +9,15 @@ const {
   getSubmissionsByQuiz,
   saveStudentNotes,
   saveFacultyFeedback,
-  checkPlagiarism
+  checkPlagiarism,
+  getAllQuizzesAdmin
 } = require('../controllers/quizController');
 const { auth, authorize } = require('../middleware/auth');
 const router = express.Router();
 
 router.post('/', auth, authorize('Faculty', 'Teacher', 'Admin'), createQuiz);
 router.get('/course/:courseId', auth, getCourseQuizzes);
+router.get('/admin/all', auth, authorize('Admin'), getAllQuizzesAdmin);
 router.get('/stats', auth, getStudentStats);
 router.get('/result/:resultId', auth, getQuizResult);
 router.get('/submissions/:quizId', auth, authorize('Faculty', 'Teacher', 'Admin'), getSubmissionsByQuiz);
