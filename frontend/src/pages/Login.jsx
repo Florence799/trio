@@ -84,13 +84,25 @@ const Login = () => {
           padding: { xs: 4, md: 5 },
           animation: 'fadeInLeft 0.8s ease-out'
         }}>
-          {/* College Branding */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 5 }}>
-            <img 
-              src={collegeLogo} 
-              alt="Logo" 
-              style={{ width: 80, height: 80, objectFit: 'contain' }}
-            />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, mb: 5 }}>
+            <Box sx={{
+              width: 80,
+              height: 80,
+              borderRadius: '50%',
+              overflow: 'hidden',
+              bgcolor: 'white',
+              border: '3px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 20px rgba(0,0,0,0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <img 
+                src={collegeLogo} 
+                alt="Logo" 
+                style={{ width: '90%', height: '90%', objectFit: 'contain' }}
+              />
+            </Box>
             <Box>
               <Typography variant="h6" sx={{ color: 'white', fontWeight: 800, lineHeight: 1.1, letterSpacing: '0.02em' }}>
                 SWARNANDHRA
