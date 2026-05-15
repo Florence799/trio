@@ -59,13 +59,12 @@ const Login = () => {
       
       {/* Left Login Panel */}
       <Box sx={{ 
-        flex: isMobile ? '1' : '0 0 40%', 
-        background: 'linear-gradient(135deg, #06163A 0%, #0B255E 100%)',
+        flex: isMobile ? '1' : '0 0 38%', 
+        background: 'linear-gradient(135deg, #020E2B 0%, #06163A 100%)',
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: { xs: 3, md: 5 },
         zIndex: 2
       }}>
         {/* Abstract Wave Pattern Overlay */}
@@ -73,55 +72,40 @@ const Login = () => {
 
         {/* Glassmorphism Login Card */}
         <Box sx={{
-          width: '100%',
-          maxWidth: 420,
-          background: 'rgba(255, 255, 255, 0.05)',
-          backdropFilter: 'blur(25px)',
-          WebkitBackdropFilter: 'blur(25px)',
-          borderRadius: '24px',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          boxShadow: '0 25px 50px rgba(0,0,0,0.3)',
-          padding: { xs: 4, md: 5 },
+          width: '85%',
+          maxWidth: 400,
+          background: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderRadius: '16px',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+          padding: { xs: 3, md: 4.5 },
           animation: 'fadeInLeft 0.8s ease-out'
         }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, mb: 5 }}>
-            <Box sx={{
-              width: 80,
-              height: 80,
-              borderRadius: '50%',
-              overflow: 'hidden',
-              bgcolor: 'white',
-              border: '3px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 8px 20px rgba(0,0,0,0.2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <img 
-                src={collegeLogo} 
-                alt="Logo" 
-                style={{ width: '90%', height: '90%', objectFit: 'contain' }}
-              />
-            </Box>
+          {/* College Branding */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
+            <img 
+              src={collegeLogo} 
+              alt="Logo" 
+              style={{ width: 65, height: 65, objectFit: 'contain' }}
+            />
             <Box>
-              <Typography variant="h6" sx={{ color: 'white', fontWeight: 800, lineHeight: 1.1, letterSpacing: '0.02em' }}>
+              <Typography variant="h6" sx={{ color: 'white', fontWeight: 700, lineHeight: 1.1, fontSize: '1rem' }}>
                 SWARNANDHRA
               </Typography>
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600, letterSpacing: '0.05em' }}>
+              <Typography variant="body2" sx={{ color: 'white', fontWeight: 500, fontSize: '0.75rem', opacity: 0.9 }}>
                 COLLEGE OF ENGINEERING
               </Typography>
             </Box>
           </Box>
 
-          <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>Login</Typography>
-          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 4 }}>
-            Please enter your credentials to continue
-          </Typography>
+          <Typography variant="h5" sx={{ color: 'white', fontWeight: 600, mb: 3 }}>Login</Typography>
 
           {error && <Alert variant="danger" className="py-2 small text-center mb-3">{error}</Alert>}
 
           <Form onSubmit={handleLogin}>
-            <Box sx={{ mb: 3 }}>
+            <Box sx={{ mb: 2.5 }}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -133,25 +117,25 @@ const Login = () => {
                   input: {
                     startAdornment: (
                       <InputAdornment position="start">
-                        <Email sx={{ color: 'rgba(255,255,255,0.7)' }} />
+                        <Email sx={{ color: '#64748B', fontSize: 20 }} />
                       </InputAdornment>
                     ),
                     sx: { 
-                      color: '#06163A', 
+                      color: '#0F172A', 
                       bgcolor: 'white',
                       borderRadius: '8px',
+                      height: '52px',
                       '& fieldset': { border: 'none' },
-                      '& input::placeholder': { color: '#94A3B8', opacity: 1 }
                     }
                   }
                 }}
               />
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', mt: 0.5, display: 'block', ml: 1, fontWeight: 600 }}>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', mt: 0.5, display: 'block', ml: 0.5 }}>
                 Email
               </Typography>
             </Box>
 
-            <Box sx={{ mb: 4 }}>
+            <Box sx={{ mb: 3.5 }}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -164,27 +148,27 @@ const Login = () => {
                   input: {
                     startAdornment: (
                       <InputAdornment position="start">
-                        <Lock sx={{ color: '#64748B' }} />
+                        <Lock sx={{ color: '#64748B', fontSize: 20 }} />
                       </InputAdornment>
                     ),
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" sx={{ color: '#64748B' }}>
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                          {showPassword ? <VisibilityOff sx={{ fontSize: 20 }} /> : <Visibility sx={{ fontSize: 20 }} />}
                         </IconButton>
                       </InputAdornment>
                     ),
                     sx: { 
-                      color: '#06163A', 
+                      color: '#0F172A', 
                       bgcolor: 'white',
                       borderRadius: '8px',
+                      height: '52px',
                       '& fieldset': { border: 'none' },
-                      '& input::placeholder': { color: '#94A3B8', opacity: 1 }
                     }
                   }
                 }}
               />
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', mt: 0.5, display: 'block', ml: 1, fontWeight: 600 }}>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', mt: 0.5, display: 'block', ml: 0.5 }}>
                 Password
               </Typography>
             </Box>
@@ -195,16 +179,15 @@ const Login = () => {
               size="large"
               type="submit"
               sx={{
-                borderRadius: '12px',
-                py: 1.8,
-                fontWeight: 700,
+                borderRadius: '8px',
+                py: 1.5,
+                fontWeight: 600,
                 fontSize: '1rem',
                 textTransform: 'none',
-                background: 'linear-gradient(90deg, #0061FF 0%, #60EFFF 100%)',
-                boxShadow: '0 8px 25px rgba(0, 97, 255, 0.4)',
+                background: '#0061FF',
+                boxShadow: '0 4px 12px rgba(0, 97, 255, 0.3)',
                 '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 12px 30px rgba(0, 97, 255, 0.5)',
+                  background: '#0056E0',
                 }
               }}
             >
@@ -212,8 +195,8 @@ const Login = () => {
             </MuiButton>
           </Form>
 
-          <Box sx={{ mt: 4, textAlign: 'right' }}>
-            <Link component={RouterLink} to="/forgot-password" sx={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none', fontWeight: 500, fontSize: '0.85rem' }}>
+          <Box sx={{ mt: 3, textAlign: 'right' }}>
+            <Link component={RouterLink} to="/forgot-password" sx={{ color: 'white', textDecoration: 'none', fontSize: '0.8rem', opacity: 0.8 }}>
               Forgot Password?
             </Link>
           </Box>
@@ -229,26 +212,30 @@ const Login = () => {
         justifyContent: 'center',
         backgroundImage: `url(${campusBg})`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center 30%', // Focused on the building
-        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(13, 27, 62, 0.05)', // Very subtle blue tint
+        }
       }}>
         <Box sx={{ 
           position: 'absolute',
-          top: '15%',
-          right: '5%',
+          top: '25%',
+          right: '8%',
           zIndex: 1, 
           textAlign: 'right', 
           animation: 'fadeInRight 1s ease-out' 
         }}>
           <Typography variant="h1" sx={{ 
-            color: 'white', 
+            color: '#06163A', // EXACT Dark Navy from the image
             fontWeight: 800, 
-            fontSize: { md: '3.5rem', lg: '4.5rem' }, 
-            lineHeight: 1,
+            fontSize: { md: '3.5rem', lg: '4rem' }, 
+            lineHeight: 1.1,
             letterSpacing: '-0.01em',
-            maxWidth: '600px',
-            fontFamily: "'Poppins', sans-serif",
-            textShadow: '0 4px 15px rgba(0,0,0,0.5)'
+            maxWidth: '550px',
+            fontFamily: "'Poppins', sans-serif"
           }}>
             Learning and <br /> Academic Support
           </Typography>
@@ -257,20 +244,18 @@ const Login = () => {
 
       <style>{`
         @keyframes fadeInLeft {
-          from { opacity: 0; transform: translateX(-30px); }
+          from { opacity: 0; transform: translateX(-20px); }
           to { opacity: 1; transform: translateX(0); }
         }
         @keyframes fadeInRight {
-          from { opacity: 0; transform: translateX(30px); }
+          from { opacity: 0; transform: translateX(20px); }
           to { opacity: 1; transform: translateX(0); }
         }
         .wave-pattern-overlay {
           position: absolute;
           inset: 0;
-          background: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
-          background-size: 24px 24px;
-          background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 2px, transparent 2px, transparent 10px);
-          opacity: 0.8;
+          background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 12px);
+          opacity: 0.6;
         }
       `}</style>
     </Box>
