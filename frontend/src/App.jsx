@@ -1,7 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link as RouterLink } from 'react-router-dom';
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Avatar, Button as MuiButton } from '@mui/material';
 import School from '@mui/icons-material/School';
 
 import RequireAuth from './components/RequireAuth';
