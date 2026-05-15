@@ -1,22 +1,21 @@
 :root {
-  --primary-teal: #14B8A6;
-  --secondary-indigo: #4F46E5;
-  --accent-green: #22C55E;
-  --bg-light: #F8FAFC;
-  --text-dark: #0F172A;
-  --text-muted: #64748B;
-  
-  --primary-gradient: linear-gradient(135deg, var(--primary-teal) 0%, var(--secondary-indigo) 100%);
-  --soft-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.4);
-  
-  --navbar-height: 80px;
+  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #7c3aed 55%, #a855f7 100%);
+  --primary-gradient-soft: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(124, 58, 237, 0.08) 100%);
+  --secondary-gradient: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+  --surface-color: #ffffff;
+  --bg-color: #f1f5f9;
+  --bg-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.06) 0px, transparent 45%),
+    radial-gradient(at 100% 100%, rgba(20, 184, 166, 0.06) 0px, transparent 40%),
+    radial-gradient(at 0% 100%, rgba(99, 102, 241, 0.05) 0px, transparent 45%);
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --accent-color: #5b5cf0;
+  --navbar-height: 72px;
 }
 
 * {
   box-sizing: border-box;
-  font-family: 'Inter', 'Poppins', sans-serif;
 }
 
 html {
@@ -25,19 +24,14 @@ html {
 
 body {
   margin: 0;
-  background-color: var(--bg-light);
-  color: var(--text-dark);
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  background-image: var(--bg-mesh);
+  background-attachment: fixed;
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
-  cursor: none !important; /* Keep custom cursor if already implemented */
-}
-
-/* Glassmorphism Utility */
-.glass-panel {
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--soft-shadow);
+  -moz-osx-font-smoothing: grayscale;
+  cursor: none !important; /* Hide default cursor */
 }
 
 /* Custom Cursor Interaction */
