@@ -229,7 +229,7 @@ const Register = () => {
           min-height: 100vh;
           overflow-y: auto;
           font-family: 'Poppins', sans-serif;
-          background: #020E2B;
+          background: #0F0C29;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -242,7 +242,7 @@ const Register = () => {
           inset: 0;
           overflow: hidden;
           z-index: 1;
-          background: linear-gradient(135deg, #020E2B 0%, #06163A 100%);
+          background: linear-gradient(135deg, #0F0C29 0%, #302B63 50%, #24243E 100%);
         }
 
         .mesh-overlay {
@@ -259,35 +259,35 @@ const Register = () => {
         .orb {
           position: absolute;
           border-radius: 50%;
-          filter: blur(80px);
+          filter: blur(100px);
           opacity: 0.4;
         }
 
         .orb-1 {
-          width: 400px;
-          height: 400px;
-          background: rgba(0, 97, 255, 0.3);
+          width: 450px;
+          height: 450px;
+          background: rgba(99, 102, 241, 0.3);
           top: -10%;
           left: -5%;
-          animation: orbFloat 15s ease-in-out infinite alternate;
+          animation: orbFloat 15s ease-in-out infinite alternate, orbPulse 10s ease-in-out infinite alternate;
         }
 
         .orb-2 {
-          width: 500px;
-          height: 500px;
-          background: rgba(100, 255, 218, 0.15);
+          width: 550px;
+          height: 550px;
+          background: rgba(168, 85, 247, 0.2);
           bottom: -10%;
           right: -5%;
-          animation: orbFloat 20s ease-in-out infinite alternate-reverse;
+          animation: orbFloat 20s ease-in-out infinite alternate-reverse, orbPulse 12s ease-in-out infinite alternate;
         }
 
         .orb-3 {
-          width: 300px;
-          height: 300px;
-          background: rgba(124, 58, 237, 0.2);
-          top: 40%;
-          right: 20%;
-          animation: orbFloat 18s ease-in-out infinite alternate;
+          width: 350px;
+          height: 350px;
+          background: rgba(79, 70, 229, 0.25);
+          top: 30%;
+          right: 15%;
+          animation: orbFloat 18s ease-in-out infinite alternate, orbPulse 8s ease-in-out infinite alternate;
         }
 
         @keyframes meshMove {
@@ -297,22 +297,42 @@ const Register = () => {
 
         @keyframes orbFloat {
           from { transform: translate(0, 0) rotate(0deg); }
-          to { transform: translate(30px, 50px) rotate(10deg); }
+          to { transform: translate(40px, 60px) rotate(15deg); }
+        }
+
+        @keyframes orbPulse {
+          from { opacity: 0.3; transform: scale(1); }
+          to { opacity: 0.6; transform: scale(1.15); }
         }
 
         .glass-register-card {
           width: 100%;
           max-width: 600px;
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-radius: 16px;
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+          background: rgba(255, 255, 255, 0.07);
+          backdrop-filter: blur(25px);
+          -webkit-backdrop-filter: blur(25px);
+          border-radius: 24px;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          box-shadow: 0 40px 80px rgba(0,0,0,0.45);
           padding: 40px;
           position: relative;
           z-index: 2;
-          animation: fadeInUp 0.8s ease-out;
+          animation: fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .form-group-custom, .row {
+          opacity: 0;
+          animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .row:nth-child(1) { animation-delay: 0.2s; }
+        .row:nth-child(2) { animation-delay: 0.3s; }
+        .row:nth-child(3) { animation-delay: 0.4s; }
+        .form-group-custom { animation-delay: 0.5s; }
+        .register-btn { 
+          animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; 
+          opacity: 0; 
+          animation-delay: 0.6s; 
         }
 
         .branding {

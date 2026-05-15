@@ -36,7 +36,61 @@ const Home = () => {
     <Box className="hero-page">
       <Box className="hero-overlay" />
       <Container className="py-5 position-relative" style={{ zIndex: 1 }}>
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={6} alignItems="center" sx={{ py: { xs: 4, md: 8 } }}>
+        <Stack className="animate-reveal" direction="row" spacing={2} sx={{ mb: 4, flexWrap: 'wrap', gap: 2 }}>
+          <Button 
+            startIcon={<AutoStories />} 
+            sx={{ 
+              bgcolor: 'rgba(255,255,255,0.1)', 
+              color: 'white', 
+              borderRadius: '30px', 
+              px: 3, 
+              py: 1, 
+              textTransform: 'none', 
+              fontWeight: 600,
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              '&:hover': { bgcolor: 'rgba(255,255,255,0.2)', transform: 'translateY(-2px)' }
+            }}
+          >
+            Courses & materials
+          </Button>
+          <Button 
+            startIcon={<TrendingUp />} 
+            sx={{ 
+              bgcolor: 'rgba(255,255,255,0.1)', 
+              color: 'white', 
+              borderRadius: '30px', 
+              px: 3, 
+              py: 1, 
+              textTransform: 'none', 
+              fontWeight: 600,
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              '&:hover': { bgcolor: 'rgba(255,255,255,0.2)', transform: 'translateY(-2px)' }
+            }}
+          >
+            Track progress
+          </Button>
+          {!materialStatsError && (
+            <Button 
+              startIcon={<Inventory2Outlined />} 
+              sx={{ 
+                bgcolor: 'rgba(255,255,255,0.1)', 
+                color: 'white', 
+                borderRadius: '30px', 
+                px: 3, 
+                py: 1, 
+                textTransform: 'none', 
+                fontWeight: 600,
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                '&:hover': { bgcolor: 'rgba(255,255,255,0.2)', transform: 'translateY(-2px)' }
+              }}
+            >
+              {materialTotal === null ? 'Checking catalog…' : `${materialTotal} published files`}
+            </Button>
+          )}
+        </Stack>
           <Box className="animate-reveal" sx={{ flex: 1, maxWidth: { md: 600 } }}>
             <Typography
               variant="h2"
