@@ -31,89 +31,100 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      {/* Left Panel */}
-      <div className="login-left-panel">
-        <div className="wave-overlay"></div>
+    <div className="login-wrapper">
+      {/* Split Screen Layout */}
+      <div className="split-container">
         
-        {/* Glass Card */}
-        <div className="glass-login-card">
-          <div className="college-branding">
-            <img src={logoImg} alt="SCET Logo" className="login-logo-img" />
-            <div className="college-name-text">
-              <div className="name-main">SWARNANDHRA</div>
-              <div className="name-sub">COLLEGE OF ENGINEERING</div>
-            </div>
-          </div>
-
-          <h2 className="login-heading">Login</h2>
-
-          {error && <div className="alert alert-danger py-2 small">{error}</div>}
-
-          <form onSubmit={handleLogin}>
-            <div className="input-group-custom">
-              <label>Email</label>
-              <div className="input-with-icon">
-                <i className="bi bi-envelope"></i>
-                <input 
-                  type="text" 
-                  placeholder="Enter your email" 
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  required 
-                />
+        {/* Left Side: Dark Navy Panel */}
+        <div className="left-panel">
+          <div className="wave-pattern"></div>
+          
+          {/* Glassmorphism Login Card */}
+          <div className="glass-card">
+            {/* Branding */}
+            <div className="branding">
+              <img src={logoImg} alt="SCET Logo" className="logo-img" />
+              <div className="college-info">
+                <h6 className="college-name">SWARNANDHRA</h6>
+                <p className="college-dept">COLLEGE OF ENGINEERING</p>
               </div>
             </div>
 
-            <div className="input-group-custom">
-              <label>Password</label>
-              <div className="input-with-icon">
-                <i className="bi bi-lock"></i>
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  placeholder="Enter your password" 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required 
-                />
-                <button 
-                  type="button" 
-                  className="toggle-password" 
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  <i className={showPassword ? "bi bi-eye-slash" : "bi bi-eye"}></i>
-                </button>
+            <h2 className="login-title">Login</h2>
+
+            {error && <div className="alert alert-danger py-2 small text-center">{error}</div>}
+
+            <form onSubmit={handleLogin}>
+              <div className="form-group-custom">
+                <label>Email</label>
+                <div className="input-box">
+                  <i className="bi bi-envelope icon-left"></i>
+                  <input 
+                    type="text" 
+                    placeholder="Enter your email" 
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    required 
+                  />
+                </div>
               </div>
+
+              <div className="form-group-custom">
+                <label>Password</label>
+                <div className="input-box">
+                  <i className="bi bi-lock icon-left"></i>
+                  <input 
+                    type={showPassword ? "text" : "password"} 
+                    placeholder="Enter your password" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required 
+                  />
+                  <button 
+                    type="button" 
+                    className="pass-toggle" 
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    <i className={showPassword ? "bi bi-eye-slash" : "bi bi-eye"}></i>
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" className="login-btn">Login</button>
+            </form>
+
+            <div className="forgot-link">
+              <Link to="/forgot-password">Forgot Password?</Link>
             </div>
-
-            <button type="submit" className="login-submit-btn">Login</button>
-          </form>
-
-          <div className="forgot-pass-container">
-            <Link to="/forgot-password">Forgot Password?</Link>
           </div>
         </div>
-      </div>
 
-      {/* Right Panel */}
-      <div className="login-right-panel" style={{ backgroundImage: `url(${campusBg})` }}>
-        <div className="right-text-content">
-          <h1>Learning and<br />Academic Support</h1>
+        {/* Right Side: Campus Background */}
+        <div className="right-panel" style={{ backgroundImage: `url(${campusBg})` }}>
+          <div className="hero-text-box">
+            <h1>Learning and<br />Academic Support</h1>
+          </div>
         </div>
+
       </div>
 
       <style>{`
-        .login-container {
-          display: flex;
-          height: 100vh;
+        .login-wrapper {
           width: 100vw;
+          height: 100vh;
           overflow: hidden;
           font-family: 'Poppins', sans-serif;
         }
 
-        /* Left Panel */
-        .login-left-panel {
-          flex: 0 0 36%;
+        .split-container {
+          display: flex;
+          width: 100%;
+          height: 100%;
+        }
+
+        /* Left Panel Styles */
+        .left-panel {
+          flex: 0 0 38%;
           background: linear-gradient(135deg, #020E2B 0%, #06163A 100%);
           display: flex;
           align-items: center;
@@ -122,143 +133,136 @@ const Login = () => {
           z-index: 2;
         }
 
-        .wave-overlay {
+        .wave-pattern {
           position: absolute;
           inset: 0;
           background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 12px);
           opacity: 0.6;
         }
 
-        /* Glass Card */
-        .glass-login-card {
+        .glass-card {
           width: 85%;
-          maxWidth: 420px;
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(25px);
-          -webkit-backdrop-filter: blur(25px);
-          border-radius: 20px;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-          padding: 40px;
-          position: relative;
-          z-index: 3;
+          max-width: 420px;
+          background: rgba(255, 255, 255, 0.08);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+          padding: 45px;
           animation: fadeInLeft 0.8s ease-out;
         }
 
-        .college-branding {
+        .branding {
           display: flex;
           align-items: center;
-          gap: 15px;
-          margin-bottom: 30px;
+          gap: 12px;
+          margin-bottom: 35px;
         }
 
-        .login-logo-img {
-          width: 70px;
-          height: 70px;
+        .logo-img {
+          width: 65px;
+          height: 65px;
           object-fit: contain;
         }
 
-        .name-main {
-          color: white;
-          font-weight: 800;
-          font-size: 1.1rem;
-          line-height: 1.2;
-        }
-
-        .name-sub {
-          color: rgba(255,255,255,0.8);
-          font-weight: 600;
-          font-size: 0.8rem;
-        }
-
-        .login-heading {
+        .college-name {
           color: white;
           font-weight: 700;
-          margin-bottom: 25px;
-          font-size: 1.8rem;
+          margin: 0;
+          font-size: 1.1rem;
+          line-height: 1;
         }
 
-        /* Form Styling */
-        .input-group-custom {
+        .college-dept {
+          color: rgba(255,255,255,0.8);
+          font-size: 0.75rem;
+          margin: 0;
+          font-weight: 500;
+        }
+
+        .login-title {
+          color: white;
+          font-weight: 600;
+          margin-bottom: 25px;
+          font-size: 1.6rem;
+        }
+
+        .form-group-custom {
           margin-bottom: 20px;
         }
 
-        .input-group-custom label {
+        .form-group-custom label {
           color: rgba(255,255,255,0.7);
-          font-size: 0.85rem;
-          margin-bottom: 8px;
+          font-size: 0.8rem;
+          margin-bottom: 6px;
           display: block;
-          font-weight: 600;
         }
 
-        .input-with-icon {
+        .input-box {
           position: relative;
           display: flex;
           align-items: center;
         }
 
-        .input-with-icon i {
+        .icon-left {
           position: absolute;
           left: 15px;
           color: #64748B;
-          font-size: 1.1rem;
         }
 
-        .input-with-icon input {
+        .input-box input {
           width: 100%;
-          padding: 14px 45px;
-          border-radius: 10px;
+          padding: 12px 40px;
+          border-radius: 8px;
           border: none;
           background: white;
           color: #0F172A;
+          font-size: 0.95rem;
           font-weight: 500;
-          font-size: 1rem;
         }
 
-        .toggle-password {
+        .pass-toggle {
           position: absolute;
-          right: 15px;
+          right: 12px;
           background: none;
           border: none;
           color: #64748B;
           cursor: pointer;
-          font-size: 1.1rem;
-          display: flex;
-          align-items: center;
         }
 
-        .login-submit-btn {
+        .login-btn {
           width: 100%;
-          padding: 14px;
-          border-radius: 10px;
+          padding: 12px;
+          border-radius: 8px;
           border: none;
           background: #0061FF;
           color: white;
-          font-weight: 700;
-          font-size: 1.1rem;
-          margin-top: 15px;
-          cursor: pointer;
-          transition: background 0.3s;
-          box-shadow: 0 10px 20px rgba(0, 97, 255, 0.3);
+          font-weight: 600;
+          font-size: 1rem;
+          margin-top: 10px;
+          transition: 0.3s;
+          box-shadow: 0 4px 12px rgba(0, 97, 255, 0.3);
         }
 
-        .login-submit-btn:hover {
+        .login-btn:hover {
           background: #0056E0;
         }
 
-        .forgot-pass-container {
+        .forgot-link {
           text-align: right;
           margin-top: 20px;
         }
 
-        .forgot-pass-container a {
-          color: rgba(255,255,255,0.7);
+        .forgot-link a {
+          color: white;
           text-decoration: none;
-          font-size: 0.85rem;
+          font-size: 0.8rem;
+          opacity: 0.8;
         }
 
-        /* Right Panel */
-        .login-right-panel {
+        /* Right Panel Styles */
+        .right-panel {
           flex: 1;
           background-size: cover;
           background-position: center;
@@ -266,49 +270,37 @@ const Login = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          filter: brightness(1.02);
         }
 
-        .right-text-content {
+        .hero-text-box {
           position: absolute;
           top: 25%;
           right: 8%;
           text-align: right;
-          z-index: 2;
         }
 
-        .right-text-content h1 {
-          color: white;
-          font-weight: 900;
-          font-size: 4.5rem;
-          line-height: 1;
-          letter-spacing: -0.02em;
-          text-shadow: 0 4px 30px rgba(0,0,0,0.5);
-          animation: fadeInScale 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes fadeInScale {
-          from { opacity: 0; transform: scale(0.9) translateX(30px); }
-          to { opacity: 1; transform: scale(1) translateX(0); }
-        }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-
-        .glass-login-card {
-          animation: fadeInLeft 0.8s ease-out, float 6s ease-in-out infinite 0.8s;
+        .hero-text-box h1 {
+          color: #06163A;
+          font-weight: 800;
+          font-size: 4rem;
+          line-height: 1.1;
+          letter-spacing: -0.01em;
+          animation: fadeInRight 1s ease-out;
         }
 
         @keyframes fadeInLeft {
-          from { opacity: 0; transform: translateX(-30px); }
+          from { opacity: 0; transform: translateX(-20px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInRight {
+          from { opacity: 0; transform: translateX(20px); }
           to { opacity: 1; transform: translateX(0); }
         }
 
         @media (max-width: 992px) {
-          .login-left-panel { flex: 1; }
-          .login-right-panel { display: none; }
+          .left-panel { flex: 1; }
+          .right-panel { display: none; }
         }
       `}</style>
     </div>
