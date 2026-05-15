@@ -155,27 +155,29 @@ const Register = () => {
             </Col>
           </Row>
 
-          <Row>
-            <Col md={role === 'Student' ? 6 : 12}>
-              <div className="form-group-custom">
-                <label>Department</label>
-                <select name="department" className="form-select-custom" value={formData.department} onChange={handleChange} required>
-                  <option value="">Select Dept</option>
-                  {['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL', 'IT'].map((dept) => (
-                    <option key={dept} value={dept}>{dept}</option>
-                  ))}
-                </select>
-              </div>
-            </Col>
-            {role === 'Student' && (
-              <Col md={6}>
+          {role !== 'Admin' && (
+            <Row>
+              <Col md={role === 'Student' ? 6 : 12}>
                 <div className="form-group-custom">
-                  <label>Section</label>
-                  <input type="text" name="section" className="form-input-plain" placeholder="e.g. A" value={formData.section} onChange={handleChange} required />
+                  <label>Department</label>
+                  <select name="department" className="form-select-custom" value={formData.department} onChange={handleChange} required>
+                    <option value="">Select Dept</option>
+                    {['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL', 'IT'].map((dept) => (
+                      <option key={dept} value={dept}>{dept}</option>
+                    ))}
+                  </select>
                 </div>
               </Col>
-            )}
-          </Row>
+              {role === 'Student' && (
+                <Col md={6}>
+                  <div className="form-group-custom">
+                    <label>Section</label>
+                    <input type="text" name="section" className="form-input-plain" placeholder="e.g. A" value={formData.section} onChange={handleChange} required />
+                  </div>
+                </Col>
+              )}
+            </Row>
+          )}
 
           <div className="form-group-custom">
             <label>Password</label>
@@ -215,7 +217,7 @@ const Register = () => {
           min-height: 100vh;
           overflow-y: auto;
           font-family: 'Poppins', sans-serif;
-          background: #0F0C29;
+          background: #050510;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -223,16 +225,16 @@ const Register = () => {
           padding: 40px 20px;
         }
 
-        .background-animations { position: absolute; inset: 0; overflow: hidden; z-index: 1; background: linear-gradient(135deg, #0F0C29 0%, #302B63 50%, #24243E 100%); }
-        .mesh-overlay { position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; mask-image: radial-gradient(ellipse at center, black, transparent 80%); animation: meshMove 20s linear infinite; }
-        .orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.4; }
-        .orb-1 { width: 450px; height: 450px; background: rgba(99, 102, 241, 0.3); top: -10%; left: -5%; animation: orbFloat 15s infinite alternate, orbPulse 10s infinite alternate; }
-        .orb-2 { width: 550px; height: 550px; background: rgba(168, 85, 247, 0.2); bottom: -10%; right: -5%; animation: orbFloat 20s infinite alternate-reverse, orbPulse 12s infinite alternate; }
-        .orb-3 { width: 350px; height: 350px; background: rgba(79, 70, 229, 0.25); top: 30%; right: 15%; animation: orbFloat 18s infinite alternate, orbPulse 8s infinite alternate; }
+        .background-animations { position: absolute; inset: 0; overflow: hidden; z-index: 1; background: linear-gradient(135deg, #050510 0%, #101030 50%, #050510 100%); }
+        .mesh-overlay { position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px); background-size: 50px 50px; mask-image: radial-gradient(ellipse at center, black, transparent 80%); animation: meshMove 20s linear infinite; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.6; }
+        .orb-1 { width: 500px; height: 500px; background: rgba(99, 102, 241, 0.4); top: -10%; left: -5%; animation: orbFloat 15s infinite alternate, orbPulse 10s infinite alternate; }
+        .orb-2 { width: 600px; height: 600px; background: rgba(168, 85, 247, 0.3); bottom: -10%; right: -5%; animation: orbFloat 20s infinite alternate-reverse, orbPulse 12s infinite alternate; }
+        .orb-3 { width: 400px; height: 400px; background: rgba(79, 70, 229, 0.35); top: 30%; right: 15%; animation: orbFloat 18s infinite alternate, orbPulse 8s infinite alternate; }
 
         @keyframes meshMove { from { background-position: 0 0; } to { background-position: 50px 50px; } }
         @keyframes orbFloat { from { transform: translate(0, 0) rotate(0deg); } to { transform: translate(40px, 60px) rotate(15deg); } }
-        @keyframes orbPulse { from { opacity: 0.3; transform: scale(1); } to { opacity: 0.6; transform: scale(1.15); } }
+        @keyframes orbPulse { from { opacity: 0.4; transform: scale(1); } to { opacity: 0.8; transform: scale(1.2); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .register-card-expanded {
