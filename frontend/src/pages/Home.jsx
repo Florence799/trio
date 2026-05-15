@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { Box, Typography, Button, Chip, Stack, Avatar, AvatarGroup } from '@mui/material';
+import { Container } from 'react-bootstrap';
+import { Box, Typography, Button, Chip, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 import AutoStories from '@mui/icons-material/AutoStories';
 import TrendingUp from '@mui/icons-material/TrendingUp';
-import Security from '@mui/icons-material/Security';
-import School from '@mui/icons-material/School';
-import RocketLaunch from '@mui/icons-material/RocketLaunch';
-import Groups from '@mui/icons-material/Groups';
+import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
 import axios from 'axios';
 import { API_BASE } from '../config';
 
@@ -33,214 +30,130 @@ const Home = () => {
   }, []);
 
   return (
-    <Box className="hero-page" sx={{ position: 'relative', overflow: 'hidden', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
-      {/* Animated Mesh Gradient Background */}
-      <Box sx={{
-        position: 'absolute',
-        inset: 0,
-        zIndex: 0,
-        background: 'radial-gradient(circle at 0% 0%, #0f172a 0%, transparent 50%), radial-gradient(circle at 100% 100%, #1e1b4b 0%, transparent 50%), radial-gradient(circle at 50% 50%, #312e81 0%, #0f172a 100%)',
-        '&::after': {
-          content: '""',
-          position: 'absolute',
-          top: '-50%',
-          left: '-50%',
-          width: '200%',
-          height: '200%',
-          background: 'radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%)',
-          animation: 'meshMove 20s linear infinite',
-        }
-      }} />
-
-      {/* Floating Decorative Elements */}
-      <Box sx={{ position: 'absolute', top: '15%', left: '10%', animation: 'float 6s ease-in-out infinite', opacity: 0.6 }}>
-        <School sx={{ fontSize: 120, color: 'rgba(99, 102, 241, 0.15)' }} />
-      </Box>
-      <Box sx={{ position: 'absolute', bottom: '20%', right: '15%', animation: 'float 8s ease-in-out infinite', opacity: 0.5 }}>
-        <RocketLaunch sx={{ fontSize: 100, color: 'rgba(168, 85, 247, 0.15)' }} />
-      </Box>
-
-      <Container className="position-relative" style={{ zIndex: 1 }}>
-        <Row className="align-items-center">
-          <Col lg={7}>
-            <Stack direction="row" spacing={1} sx={{ mb: 4, flexWrap: 'wrap', gap: 1 }}>
-              <Chip 
-                label="Next-Gen Learning" 
-                sx={{ 
-                  bgcolor: 'rgba(99, 102, 241, 0.15)', 
-                  color: '#818cf8', 
-                  fontWeight: 800, 
-                  fontSize: '0.75rem', 
-                  letterSpacing: 1, 
-                  textTransform: 'uppercase',
-                  border: '1px solid rgba(99, 102, 241, 0.3)',
-                  backdropFilter: 'blur(10px)'
-                }} 
-              />
-              {!materialStatsError && materialTotal !== null && (
-                <Chip 
-                  label={`${materialTotal}+ Learning Assets`} 
-                  sx={{ 
-                    bgcolor: 'rgba(255, 255, 255, 0.05)', 
-                    color: 'white', 
-                    fontWeight: 600, 
-                    fontSize: '0.75rem',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    backdropFilter: 'blur(10px)'
-                  }} 
-                />
-              )}
-            </Stack>
-
-            <Typography
-              variant="h1"
+    <Box className="hero-page">
+      <Box className="hero-overlay" />
+      <Container className="py-5 position-relative" style={{ zIndex: 1 }}>
+        <Stack direction="row" spacing={1} sx={{ mb: 3, flexWrap: 'wrap', gap: 1 }}>
+          <Chip icon={<AutoStories sx={{ color: 'white !important' }} />} label="Courses & materials" sx={{ bgcolor: 'rgba(255,255,255,0.15)', color: 'white', fontWeight: 600, backdropFilter: 'blur(8px)' }} />
+          <Chip icon={<TrendingUp sx={{ color: 'white !important' }} />} label="Track progress" sx={{ bgcolor: 'rgba(255,255,255,0.15)', color: 'white', fontWeight: 600, backdropFilter: 'blur(8px)' }} />
+          {!materialStatsError && (
+            <Chip
+              icon={<Inventory2Outlined sx={{ color: 'white !important' }} />}
+              label={
+                materialTotal === null
+                  ? 'Checking catalog…'
+                  : `${materialTotal} published file${materialTotal === 1 ? '' : 's'} (open after sign-in)`
+              }
+              sx={{ bgcolor: 'rgba(255,255,255,0.15)', color: 'white', fontWeight: 600, backdropFilter: 'blur(8px)' }}
+            />
+          )}
+        </Stack>
+        <Box sx={{ maxWidth: 720, py: { xs: 2, md: 4 } }}>
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 800,
+              mb: 2,
+              fontSize: { xs: '2rem', sm: '2.75rem', md: '3.25rem' },
+              lineHeight: 1.15,
+              letterSpacing: '-0.03em',
+              background: 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 45%, #c4b5fd 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              textShadow: '0 4px 30px rgba(99, 102, 241, 0.3)',
+            }}
+          >
+            Learn smarter. Teach clearer.
+          </Typography>
+          <Typography variant="h6" sx={{ color: 'rgba(226, 232, 240, 0.95)', mb: 4, fontWeight: 400, lineHeight: 1.65, maxWidth: 560 }}>
+            One place for faculty and students: courses, uploads, assignments, quizzes, and feedback — with a calm, focused experience.
+            {!materialStatsError && materialTotal !== null && (
+              <Box component="span" sx={{ display: 'block', mt: 1.5, fontSize: '0.95rem', opacity: 0.92 }}>
+                The shared catalog currently includes {materialTotal} published learning file{materialTotal === 1 ? '' : 's'}. Sign in to browse titles and download your course materials.
+              </Box>
+            )}
+          </Typography>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+            <Button
+              component={Link}
+              to="/login"
+              variant="contained"
+              size="large"
               sx={{
-                fontWeight: 900,
-                mb: 3,
-                fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.5rem' },
-                lineHeight: 1.05,
-                letterSpacing: '-0.04em',
-                background: 'linear-gradient(to bottom right, #ffffff 30%, #94a3b8 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
+                px: 4,
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 700,
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                boxShadow: '0 12px 32px rgba(99, 102, 241, 0.35)',
+                textTransform: 'none',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 16px 40px rgba(99, 102, 241, 0.45)',
+                }
               }}
             >
-              Elevate your <br />
-              <span style={{ color: '#6366f1', WebkitTextFillColor: '#6366f1' }}>educational journey.</span>
-            </Typography>
+              Sign in with Email
+            </Button>
+            <Button
+              component={Link}
+              to="/register"
+              variant="outlined"
+              size="large"
+              sx={{
+                px: 4,
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 700,
+                color: 'white',
+                borderRadius: '12px',
+                borderColor: 'rgba(255,255,255,0.55)',
+                borderWidth: 2,
+                textTransform: 'none',
+                '&:hover': {
+                  borderColor: 'white',
+                  bgcolor: 'rgba(255,255,255,0.1)',
+                  transform: 'translateY(-2px)',
+                },
+              }}
+            >
+              Register with Email
+            </Button>
+          </Stack>
+        </Box>
 
-            <Typography variant="h6" sx={{ color: '#94a3b8', mb: 5, fontWeight: 400, lineHeight: 1.7, maxWidth: 600, fontSize: '1.15rem' }}>
-              A unified ecosystem for modern educators and ambitious students. 
-              Manage courses, assessments, and feedback in a high-performance environment designed for clarity.
-            </Typography>
-
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2.5}>
-              <Button
-                component={Link}
-                to="/login"
-                variant="contained"
-                sx={{
-                  px: 5,
-                  py: 2,
-                  fontSize: '1rem',
-                  fontWeight: 800,
-                  borderRadius: '16px',
-                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-                  boxShadow: '0 15px 35px rgba(99, 102, 241, 0.4)',
-                  textTransform: 'none',
-                  transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                  '&:hover': {
-                    transform: 'translateY(-4px) scale(1.02)',
-                    boxShadow: '0 20px 45px rgba(99, 102, 241, 0.5)',
-                  }
-                }}
-              >
-                Launch Learning Portal
-              </Button>
-              <Button
-                component={Link}
-                to="/register"
-                variant="text"
-                sx={{
-                  px: 4,
-                  py: 2,
-                  fontSize: '1rem',
-                  fontWeight: 700,
-                  color: 'white',
-                  textTransform: 'none',
-                  '&:hover': {
-                    bgcolor: 'rgba(255,255,255,0.05)',
-                    color: '#818cf8'
-                  },
-                }}
-              >
-                Create New Account
-              </Button>
-            </Stack>
-
-            <Box sx={{ mt: 8, display: 'flex', alignItems: 'center', gap: 2 }}>
-              <AvatarGroup max={4}>
-                <Avatar alt="Student 1" src="https://i.pravatar.cc/150?u=1" sx={{ width: 32, height: 32, border: '2px solid #0f172a !important' }} />
-                <Avatar alt="Student 2" src="https://i.pravatar.cc/150?u=2" sx={{ width: 32, height: 32, border: '2px solid #0f172a !important' }} />
-                <Avatar alt="Student 3" src="https://i.pravatar.cc/150?u=3" sx={{ width: 32, height: 32, border: '2px solid #0f172a !important' }} />
-                <Avatar alt="Student 4" src="https://i.pravatar.cc/150?u=4" sx={{ width: 32, height: 32, border: '2px solid #0f172a !important' }} />
-              </AvatarGroup>
-              <Typography variant="body2" sx={{ color: '#64748b', fontWeight: 600 }}>
-                Joined by <span style={{ color: 'white' }}>500+</span> active learners this week
+        {/* New Purpose Section */}
+        <Box sx={{ mt: 10, pt: 8, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+          <Typography variant="overline" sx={{ color: '#c4b5fd', fontWeight: 800, letterSpacing: '0.2em' }}>
+            Portal Purpose
+          </Typography>
+          <Typography variant="h3" sx={{ color: 'white', fontWeight: 800, mb: 4, letterSpacing: '-0.02em' }}>
+            Why choose LMS Pro?
+          </Typography>
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={4}>
+            <Box sx={{ flex: 1, p: 3, borderRadius: 4, bgcolor: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <Typography variant="h6" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>For Students</Typography>
+              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
+                Access all your course materials, take interactive quizzes, submit assignments, and track your academic growth in one beautiful, distraction-free environment.
               </Typography>
             </Box>
-          </Col>
-
-          <Col lg={5} className="d-none d-lg-block">
-            <Box sx={{ 
-              position: 'relative',
-              '&::before': {
-                content: '""',
-                position: 'absolute',
-                top: '-10%',
-                right: '-10%',
-                width: '120%',
-                height: '120%',
-                background: 'radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%)',
-                zIndex: -1
-              }
-            }}>
-              <Box className="floating-card" sx={{ 
-                p: 4, 
-                borderRadius: 8, 
-                bgcolor: 'rgba(255,255,255,0.03)', 
-                backdropFilter: 'blur(30px)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                boxShadow: '0 40px 100px rgba(0,0,0,0.4)',
-              }}>
-                <Stack spacing={3}>
-                  <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    <Box sx={{ p: 1.5, borderRadius: 3, bgcolor: 'rgba(99, 102, 241, 0.1)', color: '#6366f1' }}>
-                      <AutoStories />
-                    </Box>
-                    <Box>
-                      <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 800 }}>Smart Materials</Typography>
-                      <Typography variant="body2" sx={{ color: '#64748b' }}>AI-organized study sets</Typography>
-                    </Box>
-                  </Box>
-                  <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    <Box sx={{ p: 1.5, borderRadius: 3, bgcolor: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
-                      <TrendingUp />
-                    </Box>
-                    <Box>
-                      <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 800 }}>Live Performance</Typography>
-                      <Typography variant="body2" sx={{ color: '#64748b' }}>Real-time growth tracking</Typography>
-                    </Box>
-                  </Box>
-                  <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    <Box sx={{ p: 1.5, borderRadius: 3, bgcolor: 'rgba(244, 63, 94, 0.1)', color: '#f43f5e' }}>
-                      <Security />
-                    </Box>
-                    <Box>
-                      <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 800 }}>Integrity Check</Typography>
-                      <Typography variant="body2" sx={{ color: '#64748b' }}>Advanced plagiarism audit</Typography>
-                    </Box>
-                  </Box>
-                </Stack>
-              </Box>
+            <Box sx={{ flex: 1, p: 3, borderRadius: 4, bgcolor: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <Typography variant="h6" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>For Faculty</Typography>
+              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
+                Easily manage your courses, distribute study materials, create automated quizzes, and analyze student feedback with built-in sentiment analysis.
+              </Typography>
             </Box>
-          </Col>
-        </Row>
+            <Box sx={{ flex: 1, p: 3, borderRadius: 4, bgcolor: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <Typography variant="h6" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>Secure & Unified</Typography>
+              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
+                A secure login system ensures your data and intellectual property are protected. Integrated email-based authentication provides a seamless cross-device experience.
+              </Typography>
+            </Box>
+          </Stack>
+        </Box>
       </Container>
-
-      {/* Global CSS for unique animations */}
-      <style>{`
-        @keyframes meshMove {
-          0% { transform: translate(-5%, -5%) rotate(0deg); }
-          50% { transform: translate(5%, 5%) rotate(180deg); }
-          100% { transform: translate(-5%, -5%) rotate(360deg); }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(5deg); }
-        }
-      `}</style>
     </Box>
   );
 };
