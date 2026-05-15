@@ -8,6 +8,9 @@ import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
 import axios from 'axios';
 import { API_BASE } from '../config';
 
+// Import official assets
+import campusBg from '../assets/collegeimg.png';
+
 const Home = () => {
   const [materialTotal, setMaterialTotal] = useState(null);
   const [materialStatsError, setMaterialStatsError] = useState(false);
