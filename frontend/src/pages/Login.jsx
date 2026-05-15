@@ -266,7 +266,7 @@ const Login = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          filter:'brightness(1.02)';
+          filter: brightness(1.02);
         }
 
         .right-text-content {
