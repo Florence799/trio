@@ -12,8 +12,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE } from '../config';
 import { Modal, Form } from 'react-bootstrap';
-import CampaignIcon from '@mui/icons-material/Campaign';
-import DeleteOutline from '@mui/icons-material/DeleteOutline';
+import Campaign from '@mui/icons-material/Campaign';
+import Delete from '@mui/icons-material/Delete';
 
 const Dashboard = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -208,7 +208,7 @@ const Dashboard = () => {
       <Box sx={{ mb: 4 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h5" sx={{ fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: 1 }}>
-            <CampaignIcon color="primary" /> Announcements & Notifications
+            <Campaign color="primary" /> Announcements & Notifications
           </Typography>
           {user.role === 'Admin' && (
             <MuiButton 
@@ -252,7 +252,7 @@ const Dashboard = () => {
                       </Badge>
                       {user.role === 'Admin' && (
                         <IconButton size="small" color="error" onClick={() => handleDeleteAnnouncement(a._id)}>
-                          <DeleteOutline fontSize="small" />
+                          <Delete fontSize="small" />
                         </IconButton>
                       )}
                     </Box>
