@@ -420,7 +420,7 @@ const CourseDetails = () => {
             )}
             <Paper elevation={0} sx={{ p: 3, borderRadius: 4, bgcolor: '#f8fafc', border: '1px solid #e2e8f0' }}>
               <Typography variant="h6" gutterBottom>Dashboard</Typography>
-              <Typography variant="body2" color="textSecondary" paragraph>
+              <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
                 Access all your academic resources here.
               </Typography>
               <Divider sx={{ my: 2 }} />

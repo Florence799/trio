@@ -224,6 +224,21 @@ const checkPlagiarism = async (req, res) => {
   }
 };
 
+const getAllQuizzesAdmin = async (req, res) => {
+  try {
+    const quizzes = await Quiz.find()
+      .populate({
+        path: 'course',
+        select: 'courseName department year section teacher',
+        populate: { path: 'teacher', select: 'name' }
+      })
+      .sort({ createdAt: -1 });
+    res.send(quizzes);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
 module.exports = { 
   createQuiz, 
   getCourseQuizzes, 
@@ -234,6 +249,7 @@ module.exports = {
   getSubmissionsByQuiz,
   saveStudentNotes,
   saveFacultyFeedback,
-  checkPlagiarism
+  checkPlagiarism,
+  getAllQuizzesAdmin
 };
 
