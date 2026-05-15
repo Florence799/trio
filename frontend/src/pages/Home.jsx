@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
-import { Box, Typography, Button, Chip, Stack } from '@mui/material';
+import { Box, Typography, Button, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 import AutoStories from '@mui/icons-material/AutoStories';
 import TrendingUp from '@mui/icons-material/TrendingUp';
@@ -36,6 +36,8 @@ const Home = () => {
     <Box className="hero-page">
       <Box className="hero-overlay" />
       <Container className="py-5 position-relative" style={{ zIndex: 1 }}>
+        
+        {/* Action Buttons Header */}
         <Stack className="animate-reveal" direction="row" spacing={2} sx={{ mb: 4, flexWrap: 'wrap', gap: 2 }}>
           <Button 
             startIcon={<AutoStories />} 
@@ -91,6 +93,9 @@ const Home = () => {
             </Button>
           )}
         </Stack>
+
+        {/* Main Hero Split */}
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={6} alignItems="center" sx={{ py: { xs: 4, md: 8 } }}>
           <Box className="animate-reveal" sx={{ flex: 1, maxWidth: { md: 600 } }}>
             <Typography
               variant="h2"
