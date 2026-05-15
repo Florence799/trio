@@ -55,7 +55,12 @@ const Register = () => {
 
   return (
     <div className="register-wrapper">
-      <div className="wave-pattern"></div>
+      <div className="background-animations">
+        <div className="orb orb-1"></div>
+        <div className="orb orb-2"></div>
+        <div className="orb orb-3"></div>
+        <div className="mesh-overlay"></div>
+      </div>
       
       <div className="glass-register-card">
         <div className="branding">
@@ -224,7 +229,7 @@ const Register = () => {
           min-height: 100vh;
           overflow-y: auto;
           font-family: 'Poppins', sans-serif;
-          background: linear-gradient(135deg, #020E2B 0%, #06163A 100%);
+          background: #020E2B;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -232,12 +237,67 @@ const Register = () => {
           padding: 40px 20px;
         }
 
-        .wave-pattern {
+        .background-animations {
           position: absolute;
           inset: 0;
-          background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 12px);
-          opacity: 0.6;
+          overflow: hidden;
           z-index: 1;
+          background: linear-gradient(135deg, #020E2B 0%, #06163A 100%);
+        }
+
+        .mesh-overlay {
+          position: absolute;
+          inset: 0;
+          background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 50px 50px;
+          mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+          animation: meshMove 20s linear infinite;
+        }
+
+        .orb {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(80px);
+          opacity: 0.4;
+        }
+
+        .orb-1 {
+          width: 400px;
+          height: 400px;
+          background: rgba(0, 97, 255, 0.3);
+          top: -10%;
+          left: -5%;
+          animation: orbFloat 15s ease-in-out infinite alternate;
+        }
+
+        .orb-2 {
+          width: 500px;
+          height: 500px;
+          background: rgba(100, 255, 218, 0.15);
+          bottom: -10%;
+          right: -5%;
+          animation: orbFloat 20s ease-in-out infinite alternate-reverse;
+        }
+
+        .orb-3 {
+          width: 300px;
+          height: 300px;
+          background: rgba(124, 58, 237, 0.2);
+          top: 40%;
+          right: 20%;
+          animation: orbFloat 18s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshMove {
+          from { background-position: 0 0; }
+          to { background-position: 50px 50px; }
+        }
+
+        @keyframes orbFloat {
+          from { transform: translate(0, 0) rotate(0deg); }
+          to { transform: translate(30px, 50px) rotate(10deg); }
         }
 
         .glass-register-card {
