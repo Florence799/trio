@@ -48,81 +48,96 @@ const Home = () => {
             />
           )}
         </Stack>
-        <Box className="animate-reveal" sx={{ maxWidth: 720, py: { xs: 2, md: 4 }, animationDelay: '0.2s' }}>
-          <Typography
-            variant="h2"
-            sx={{
-              fontWeight: 800,
-              mb: 2,
-              fontSize: { xs: '2rem', sm: '2.75rem', md: '3.25rem' },
-              lineHeight: 1.15,
-              letterSpacing: '-0.03em',
-              background: 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 45%, #c4b5fd 100%)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              textShadow: '0 4px 30px rgba(99, 102, 241, 0.3)',
-            }}
-          >
-            Learn smarter. Teach clearer.
-          </Typography>
-          <Typography variant="h6" sx={{ color: 'rgba(226, 232, 240, 0.95)', mb: 4, fontWeight: 400, lineHeight: 1.65, maxWidth: 560 }}>
-            One place for faculty and students: courses, uploads, assignments, quizzes, and feedback — with a calm, focused experience.
-            {!materialStatsError && materialTotal !== null && (
-              <Box component="span" sx={{ display: 'block', mt: 1.5, fontSize: '0.95rem', opacity: 0.92 }}>
-                The shared catalog currently includes {materialTotal} published learning file{materialTotal === 1 ? '' : 's'}. Sign in to browse titles and download your course materials.
-              </Box>
-            )}
-          </Typography>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <Button
-              component={Link}
-              to="/login"
-              variant="contained"
-              size="large"
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={6} alignItems="center" sx={{ py: { xs: 4, md: 8 } }}>
+          <Box className="animate-reveal" sx={{ flex: 1, maxWidth: { md: 600 } }}>
+            <Typography
+              variant="h2"
               sx={{
-                px: 4,
-                py: 1.5,
-                fontSize: '1rem',
-                fontWeight: 700,
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-                boxShadow: '0 12px 32px rgba(99, 102, 241, 0.35)',
-                textTransform: 'none',
-                '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 16px 40px rgba(99, 102, 241, 0.45)',
-                }
+                fontWeight: 900,
+                mb: 3,
+                fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4rem' },
+                lineHeight: 1.1,
+                letterSpacing: '-0.04em',
+                background: 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 45%, #c4b5fd 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
               }}
             >
-              Sign in with Email
-            </Button>
-            <Button
-              component={Link}
-              to="/register"
-              variant="outlined"
-              size="large"
-              sx={{
-                px: 4,
-                py: 1.5,
-                fontSize: '1rem',
-                fontWeight: 700,
-                color: 'white',
-                borderRadius: '12px',
-                borderColor: 'rgba(255,255,255,0.55)',
-                borderWidth: 2,
-                textTransform: 'none',
-                '&:hover': {
-                  borderColor: 'white',
-                  bgcolor: 'rgba(255,255,255,0.1)',
-                  transform: 'translateY(-2px)',
-                },
-              }}
-            >
-              Register with Email
-            </Button>
-          </Stack>
-        </Box>
+              Learn smarter.<br />Teach clearer.
+            </Typography>
+            <Typography variant="h6" sx={{ color: 'rgba(226, 232, 240, 0.85)', mb: 5, fontWeight: 400, lineHeight: 1.6, maxWidth: 500 }}>
+              One place for faculty and students: courses, uploads, assignments, quizzes, and feedback — with a calm, focused experience.
+            </Typography>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2.5}>
+              <Button
+                component={Link}
+                to="/login"
+                variant="contained"
+                size="large"
+                sx={{
+                  px: 5,
+                  py: 2,
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
+                  borderRadius: '16px',
+                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                  boxShadow: '0 12px 32px rgba(99, 102, 241, 0.35)',
+                  textTransform: 'none',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 16px 40px rgba(99, 102, 241, 0.45)',
+                  }
+                }}
+              >
+                Sign in
+              </Button>
+              <Button
+                component={Link}
+                to="/register"
+                variant="outlined"
+                size="large"
+                sx={{
+                  px: 5,
+                  py: 2,
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
+                  color: 'white',
+                  borderRadius: '16px',
+                  borderColor: 'rgba(255,255,255,0.3)',
+                  borderWidth: 2,
+                  textTransform: 'none',
+                  '&:hover': {
+                    borderColor: 'white',
+                    bgcolor: 'rgba(255,255,255,0.1)',
+                    transform: 'translateY(-2px)',
+                  },
+                }}
+              >
+                Create Account
+              </Button>
+            </Stack>
+          </Box>
+
+          {/* Contained Campus Image Box */}
+          <Box className="animate-reveal" sx={{ 
+            flex: 1, 
+            display: { xs: 'none', md: 'block' },
+            animationDelay: '0.4s'
+          }}>
+            <Box sx={{
+              width: '100%',
+              height: '480px',
+              borderRadius: '40px',
+              overflow: 'hidden',
+              boxShadow: '0 30px 70px rgba(0,0,0,0.5)',
+              backgroundImage: `url(${campusBg})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              border: '1px solid rgba(255,255,255,0.1)'
+            }} />
+          </Box>
+        </Stack>
 
         {/* New Purpose Section */}
         <Box className="animate-reveal" sx={{ mt: 10, pt: 8, borderTop: '1px solid rgba(255,255,255,0.1)', animationDelay: '0.4s' }}>
