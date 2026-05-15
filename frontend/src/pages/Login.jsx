@@ -4,7 +4,6 @@ import axios from 'axios';
 import { API_BASE } from '../config';
 
 // Import official assets
-import campusBg from '../assets/collegeimg.png';
 import logoImg from '../assets/logo.jpeg';
 
 const Login = () => {
@@ -32,80 +31,64 @@ const Login = () => {
 
   return (
     <div className="login-wrapper">
-      <div className="split-container">
-        
-        {/* Left Side: Dark Navy Panel */}
-        <div className="left-panel">
-          <div className="wave-pattern"></div>
-          
-          {/* Glassmorphism Login Card */}
-          <div className="glass-card">
-            <div className="branding">
-              <img src={logoImg} alt="SCET Logo" className="logo-img" />
-              <div className="college-info">
-                <h6 className="college-name">SWARNANDHRA</h6>
-                <p className="college-dept">COLLEGE OF ENGINEERING</p>
-              </div>
-            </div>
-
-            <h2 className="login-title">Login</h2>
-
-            {error && <div className="alert alert-danger py-2 small text-center">{error}</div>}
-
-            <form onSubmit={handleLogin}>
-              <div className="form-group-custom">
-                <label>Email</label>
-                <div className="input-box">
-                  <i className="bi bi-envelope icon-left"></i>
-                  <input 
-                    type="text" 
-                    placeholder="Enter your email" 
-                    value={identifier}
-                    onChange={(e) => setIdentifier(e.target.value)}
-                    required 
-                  />
-                </div>
-              </div>
-
-              <div className="form-group-custom">
-                <label>Password</label>
-                <div className="input-box">
-                  <i className="bi bi-lock icon-left"></i>
-                  <input 
-                    type={showPassword ? "text" : "password"} 
-                    placeholder="Enter your password" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required 
-                  />
-                  <button 
-                    type="button" 
-                    className="pass-toggle" 
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    <i className={showPassword ? "bi bi-eye-slash" : "bi bi-eye"}></i>
-                  </button>
-                </div>
-              </div>
-
-              <button type="submit" className="login-btn">Login</button>
-            </form>
-
-            <div className="forgot-link">
-              <Link to="/forgot-password">Forgot Password?</Link>
-            </div>
+      <div className="wave-pattern"></div>
+      
+      {/* Centered Glassmorphism Login Card */}
+      <div className="glass-card">
+        <div className="branding">
+          <img src={logoImg} alt="SCET Logo" className="logo-img" />
+          <div className="college-info">
+            <h6 className="college-name">SWARNANDHRA</h6>
+            <p className="college-dept">COLLEGE OF ENGINEERING</p>
           </div>
         </div>
 
-        {/* Right Side: Contained Campus Image */}
-        <div className="right-panel-contained">
-          <div className="boxed-image-container" style={{ backgroundImage: `url(${campusBg})` }}>
-            <div className="hero-text-box">
-              <h1>Learning and<br />Academic Support</h1>
+        <h2 className="login-title">Login</h2>
+
+        {error && <div className="alert alert-danger py-2 small text-center">{error}</div>}
+
+        <form onSubmit={handleLogin}>
+          <div className="form-group-custom">
+            <label>Email</label>
+            <div className="input-box">
+              <i className="bi bi-envelope icon-left"></i>
+              <input 
+                type="text" 
+                placeholder="Enter your email" 
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                required 
+              />
             </div>
           </div>
-        </div>
 
+          <div className="form-group-custom">
+            <label>Password</label>
+            <div className="input-box">
+              <i className="bi bi-lock icon-left"></i>
+              <input 
+                type={showPassword ? "text" : "password"} 
+                placeholder="Enter your password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required 
+              />
+              <button 
+                type="button" 
+                className="pass-toggle" 
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <i className={showPassword ? "bi bi-eye-slash" : "bi bi-eye"}></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" className="login-btn">Login</button>
+        </form>
+
+        <div className="forgot-link">
+          <Link to="/forgot-password">Forgot Password?</Link>
+        </div>
       </div>
 
       <style>{`
@@ -114,24 +97,11 @@ const Login = () => {
           height: 100vh;
           overflow: hidden;
           font-family: 'Poppins', sans-serif;
-          background: #f8fafc;
-        }
-
-        .split-container {
-          display: flex;
-          width: 100%;
-          height: 100%;
-        }
-
-        /* Left Panel Styles */
-        .left-panel {
-          flex: 0 0 38%;
           background: linear-gradient(135deg, #020E2B 0%, #06163A 100%);
           display: flex;
           align-items: center;
           justify-content: center;
           position: relative;
-          z-index: 2;
         }
 
         .wave-pattern {
@@ -139,10 +109,11 @@ const Login = () => {
           inset: 0;
           background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 12px);
           opacity: 0.6;
+          z-index: 1;
         }
 
         .glass-card {
-          width: 85%;
+          width: 90%;
           max-width: 420px;
           background: rgba(255, 255, 255, 0.08);
           backdrop-filter: blur(20px);
@@ -151,7 +122,9 @@ const Login = () => {
           border: 1px solid rgba(255, 255, 255, 0.15);
           box-shadow: 0 25px 50px rgba(0,0,0,0.4);
           padding: 45px;
-          animation: fadeInLeft 0.8s ease-out;
+          position: relative;
+          z-index: 2;
+          animation: fadeInUp 0.8s ease-out;
         }
 
         .branding {
@@ -248,6 +221,7 @@ const Login = () => {
 
         .login-btn:hover {
           background: #0056E0;
+          transform: translateY(-1px);
         }
 
         .forgot-link {
@@ -262,59 +236,9 @@ const Login = () => {
           opacity: 0.8;
         }
 
-        /* Right Panel Styles (Contained) */
-        .right-panel-contained {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 30px;
-        }
-
-        .boxed-image-container {
-          width: 100%;
-          height: 480px; /* MATCHING HOME PAGE SIZE */
-          background-size: cover;
-          background-position: center;
-          border-radius: 32px;
-          box-shadow: 0 25px 60px rgba(0,0,0,0.15);
-          position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-          animation: fadeInScale 1s ease-out;
-        }
-
-        .hero-text-box {
-          position: absolute;
-          top: 20%;
-          right: 8%;
-          text-align: right;
-        }
-
-        .hero-text-box h1 {
-          color: white; /* WHITE FOR VISIBILITY ON BOXED IMAGE */
-          font-weight: 800;
-          font-size: 3rem;
-          line-height: 1.1;
-          letter-spacing: -0.01em;
-          text-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        }
-
-        @keyframes fadeInLeft {
-          from { opacity: 0; transform: translateX(-20px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes fadeInScale {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
-        }
-
-        @media (max-width: 992px) {
-          .left-panel { flex: 1; }
-          .right-panel-contained { display: none; }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </div>
