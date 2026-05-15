@@ -31,6 +31,12 @@ body {
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: none !important; /* Hide default cursor */
+}
+
+/* Custom Cursor Interaction */
+a, button, [role="button"] {
+  cursor: none !important;
 }
 
 ::selection {
