@@ -71,6 +71,7 @@ app.use('/api/courses', require('./routes/courseRoutes'));
 app.use('/api/assignments', require('./routes/assignmentRoutes'));
 app.use('/api/quizzes', require('./routes/quizRoutes'));
 app.use('/api/feedback', require('./routes/feedbackRoutes'));
+app.use('/api/announcements', require('./routes/announcementRoutes'));
 
 app.get('/', (req, res) => {
   res.send('LMS Backend API is running...');

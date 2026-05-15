@@ -126,4 +126,15 @@ const updateStudentYear = async (req, res) => {
   }
 };
 
-module.exports = { register, login, getUserStats, updateStudentYear };
+const getAllUsers = async (req, res) => {
+  try {
+    const { role } = req.query;
+    const query = role ? { role } : { role: { $ne: 'Admin' } };
+    const users = await User.find(query).select('-password').sort({ name: 1 });
+    res.send(users);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
+module.exports = { register, login, getUserStats, updateStudentYear, getAllUsers };

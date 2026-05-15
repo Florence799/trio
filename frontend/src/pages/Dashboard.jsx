@@ -11,8 +11,14 @@ import EmojiEvents from '@mui/icons-material/EmojiEvents';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE } from '../config';
+import { Modal, Form } from 'react-bootstrap';
+import CampaignIcon from '@mui/icons-material/Campaign';
+import DeleteOutline from '@mui/icons-material/DeleteOutline';
 
 const Dashboard = () => {
+  const [announcements, setAnnouncements] = useState([]);
+  const [showAnnounceModal, setShowAnnounceModal] = useState(false);
+  const [newAnnounce, setNewAnnounce] = useState({ title: '', content: '', targetRole: 'All', category: 'General' });
   const [coursesCount, setCoursesCount] = useState(0);
   const [assignmentsCount, setAssignmentsCount] = useState(0);
   const [quizzesCount, setQuizzesCount] = useState(0);
@@ -28,9 +34,10 @@ const Dashboard = () => {
         const token = localStorage.getItem('token');
         const headers = { Authorization: `Bearer ${token}` };
         
-        const [courseRes, statsRes] = await Promise.all([
+        const [courseRes, statsRes, announceRes] = await Promise.all([
           axios.get(`${API_BASE}/api/courses`, { headers }),
-          axios.get(`${API_BASE}/api/auth/stats`, { headers })
+          axios.get(`${API_BASE}/api/auth/stats`, { headers }),
+          axios.get(`${API_BASE}/api/announcements`, { headers })
         ]);
 
         const assignmentResponses = await Promise.all(
@@ -44,6 +51,7 @@ const Dashboard = () => {
         setAssignmentsCount(assignmentResponses.reduce((acc, response) => acc + response.data.length, 0));
         setQuizzesCount(quizResponses.reduce((acc, response) => acc + response.data.length, 0));
         setUserStats(statsRes.data);
+        setAnnouncements(announceRes.data);
       } catch (err) {
         setError('Failed to load dashboard data.');
       } finally {
@@ -53,6 +61,32 @@ const Dashboard = () => {
 
     fetchDashboardData();
   }, []);
+
+  const handlePostAnnouncement = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { Authorization: `Bearer ${token}` };
+      const res = await axios.post(`${API_BASE}/api/announcements`, newAnnounce, { headers });
+      setAnnouncements([res.data, ...announcements]);
+      setShowAnnounceModal(false);
+      setNewAnnounce({ title: '', content: '', targetRole: 'All', category: 'General' });
+    } catch (err) {
+      setError('Failed to post announcement.');
+    }
+  };
+
+  const handleDeleteAnnouncement = async (id) => {
+    if (!window.confirm('Delete this announcement?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { Authorization: `Bearer ${token}` };
+      await axios.delete(`${API_BASE}/api/announcements/${id}`, { headers });
+      setAnnouncements(announcements.filter(a => a._id !== id));
+    } catch (err) {
+      setError('Failed to delete announcement.');
+    }
+  };
 
   const stats = user.role === 'Student' ? [
     { title: 'My Courses', count: coursesCount, icon: <School />, color: '#4caf50', path: '/my-courses' },
@@ -169,6 +203,76 @@ const Dashboard = () => {
         {/* Background Decorative Elements */}
         <Box sx={{ position: 'absolute', top: '-20%', left: '-5%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(30px)', pointerEvents: 'none' }} />
         <Box sx={{ position: 'absolute', bottom: '-20%', right: '-5%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(168,85,247,0.3) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(30px)', pointerEvents: 'none' }} />
+      </Box>
+
+      <Box sx={{ mb: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h5" sx={{ fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: 1 }}>
+            <CampaignIcon color="primary" /> Announcements & Notifications
+          </Typography>
+          {user.role === 'Admin' && (
+            <MuiButton 
+              size="small" 
+              variant="contained" 
+              onClick={() => setShowAnnounceModal(true)}
+              sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 700 }}
+            >
+              Post Announcement
+            </MuiButton>
+          )}
+        </Box>
+        
+        {!announcements.length ? (
+          <Alert variant="light" className="text-muted border-0 shadow-sm" style={{ borderRadius: '15px' }}>
+            No active announcements at the moment.
+          </Alert>
+        ) : (
+          <Row className="g-3">
+            {announcements.map((a) => (
+              <Col md={6} key={a._id}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 2.5,
+                    borderRadius: 4,
+                    border: '1px solid rgba(15, 23, 42, 0.08)',
+                    background: a.targetRole === 'Faculty' ? 'linear-gradient(135deg, #fef2f2 0%, #fff 100%)' : 'linear-gradient(135deg, #f0f9ff 0%, #fff 100%)',
+                    position: 'relative',
+                    transition: '0.2s',
+                    '&:hover': { boxShadow: '0 8px 24px rgba(0,0,0,0.05)' }
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#1e293b' }}>
+                      {a.title}
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                      <Badge bg={a.category === 'FDP' ? 'danger' : (a.category === 'Course' ? 'success' : 'primary')} style={{ fontSize: '0.6rem' }}>
+                        {a.category}
+                      </Badge>
+                      {user.role === 'Admin' && (
+                        <IconButton size="small" color="error" onClick={() => handleDeleteAnnouncement(a._id)}>
+                          <DeleteOutline fontSize="small" />
+                        </IconButton>
+                      )}
+                    </Box>
+                  </Box>
+                  <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2, lineHeight: 1.5 }}>
+                    {a.content}
+                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="caption" sx={{ color: 'text.disabled', fontWeight: 600 }}>
+                      {new Date(a.createdAt).toLocaleDateString()}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'primary.main', fontWeight: 700 }}>
+                      For: {a.targetRole}
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Col>
+            ))}
+          </Row>
+        )}
       </Box>
 
       <Typography variant="h5" sx={{ fontWeight: 800, color: '#0f172a', mb: 3, px: 1 }}>
@@ -406,6 +510,70 @@ const Dashboard = () => {
           </Col>
         ))}
       </Row>
+      {/* Post Announcement Modal */}
+      <Modal show={showAnnounceModal} onHide={() => setShowAnnounceModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title className="fw-bold">New Announcement</Modal.Title>
+        </Modal.Header>
+        <Form onSubmit={handlePostAnnouncement}>
+          <Modal.Body>
+            <Form.Group className="mb-3">
+              <Form.Label>Title</Form.Label>
+              <Form.Control 
+                type="text" 
+                placeholder="e.g. FDP on Generative AI" 
+                value={newAnnounce.title}
+                onChange={(e) => setNewAnnounce({...newAnnounce, title: e.target.value})}
+                required 
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Content</Form.Label>
+              <Form.Control 
+                as="textarea" 
+                rows={3} 
+                placeholder="Details of the announcement..." 
+                value={newAnnounce.content}
+                onChange={(e) => setNewAnnounce({...newAnnounce, content: e.target.value})}
+                required 
+              />
+            </Form.Group>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Target Role</Form.Label>
+                  <Form.Select 
+                    value={newAnnounce.targetRole}
+                    onChange={(e) => setNewAnnounce({...newAnnounce, targetRole: e.target.value})}
+                  >
+                    <option value="All">All Users</option>
+                    <option value="Student">Students Only</option>
+                    <option value="Faculty">Faculty Only</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Category</Form.Label>
+                  <Form.Select 
+                    value={newAnnounce.category}
+                    onChange={(e) => setNewAnnounce({...newAnnounce, category: e.target.value})}
+                  >
+                    <option value="General">General</option>
+                    <option value="FDP">FDP</option>
+                    <option value="Course">New Course</option>
+                    <option value="Event">Event</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <MuiButton variant="text" onClick={() => setShowAnnounceModal(false)}>Cancel</MuiButton>
+            <MuiButton variant="contained" type="submit">Post Now</MuiButton>
+          </Modal.Footer>
+        </Form>
+      </Modal>
     </Container>
   );
 };

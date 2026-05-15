@@ -61,4 +61,34 @@ const getSubmissionsForAssignment = async (req, res) => {
   }
 };
 
-module.exports = { createAssignment, getCourseAssignments, submitAssignment, gradeSubmission, getSubmissionsForAssignment };
+const getAllAssignmentsAdmin = async (req, res) => {
+  try {
+    const assignments = await Assignment.find()
+      .populate({
+        path: 'course',
+        select: 'courseName department year section teacher',
+        populate: { path: 'teacher', select: 'name' }
+      })
+      .sort({ createdAt: -1 });
+    res.send(assignments);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
+const getAllQuizzesAdmin = async (req, res) => {
+  try {
+    const quizzes = await Quiz.find()
+      .populate({
+        path: 'course',
+        select: 'courseName department year section teacher',
+        populate: { path: 'teacher', select: 'name' }
+      })
+      .sort({ createdAt: -1 });
+    res.send(quizzes);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
+module.exports = { createAssignment, getCourseAssignments, submitAssignment, gradeSubmission, getSubmissionsForAssignment, getAllAssignmentsAdmin, getAllQuizzesAdmin };
