@@ -19,6 +19,10 @@ import Lock from '@mui/icons-material/Lock';
 import axios from 'axios';
 import { API_BASE } from '../config';
 
+// Import official assets
+import campusBg from '../assets/collegeimage.jpeg';
+import collegeLogo from '../assets/logo.jpeg';
+
 const Login = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -83,9 +87,9 @@ const Login = () => {
           {/* College Branding */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 5 }}>
             <img 
-              src="/assets/college_logo.png" 
+              src={collegeLogo} 
               alt="Logo" 
-              style={{ width: 60, height: 60, objectFit: 'contain' }}
+              style={{ width: 80, height: 80, objectFit: 'contain' }}
             />
             <Box>
               <Typography variant="h6" sx={{ color: 'white', fontWeight: 800, lineHeight: 1.1, letterSpacing: '0.02em' }}>
@@ -211,7 +215,7 @@ const Login = () => {
         display: isMobile ? 'none' : 'flex',
         alignItems: 'center',
         justifyContent: 'center', // Center vertically
-        backgroundImage: 'url(/assets/campus_bg.png)',
+        backgroundImage: `url(${campusBg})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         '&::before': {
