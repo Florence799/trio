@@ -55,7 +55,7 @@ function App() {
                 <School sx={{ color: 'white', fontSize: 26 }} />
               </Box>
               <Box component="span" sx={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-                <span style={{ fontWeight: 800, letterSpacing: '-0.03em', color: '#0f172a', fontSize: '1.2rem' }}>
+                <span style={{ fontWeight: 800, letterSpacing: '-0.03em', color: '#0f172a', fontSize: '1.5rem' }}>
                   LMS Pro
                 </span>
                 <Typography component="span" variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>

@@ -32,7 +32,6 @@ const Login = () => {
 
   return (
     <div className="login-wrapper">
-      {/* Split Screen Layout */}
       <div className="split-container">
         
         {/* Left Side: Dark Navy Panel */}
@@ -41,7 +40,6 @@ const Login = () => {
           
           {/* Glassmorphism Login Card */}
           <div className="glass-card">
-            {/* Branding */}
             <div className="branding">
               <img src={logoImg} alt="SCET Logo" className="logo-img" />
               <div className="college-info">
@@ -99,10 +97,12 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Right Side: Campus Background */}
-        <div className="right-panel" style={{ backgroundImage: `url(${campusBg})` }}>
-          <div className="hero-text-box">
-            <h1>Learning and<br />Academic Support</h1>
+        {/* Right Side: Contained Campus Image */}
+        <div className="right-panel-contained">
+          <div className="boxed-image-container" style={{ backgroundImage: `url(${campusBg})` }}>
+            <div className="hero-text-box">
+              <h1>Learning and<br />Academic Support</h1>
+            </div>
           </div>
         </div>
 
@@ -114,6 +114,7 @@ const Login = () => {
           height: 100vh;
           overflow: hidden;
           font-family: 'Poppins', sans-serif;
+          background: #f8fafc;
         }
 
         .split-container {
@@ -261,31 +262,44 @@ const Login = () => {
           opacity: 0.8;
         }
 
-        /* Right Panel Styles */
-        .right-panel {
+        /* Right Panel Styles (Contained) */
+        .right-panel-contained {
           flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 30px;
+        }
+
+        .boxed-image-container {
+          width: 100%;
+          height: 480px; /* MATCHING HOME PAGE SIZE */
           background-size: cover;
           background-position: center;
+          border-radius: 32px;
+          box-shadow: 0 25px 60px rgba(0,0,0,0.15);
           position: relative;
           display: flex;
           align-items: center;
           justify-content: center;
+          overflow: hidden;
+          animation: fadeInScale 1s ease-out;
         }
 
         .hero-text-box {
           position: absolute;
-          top: 25%;
+          top: 20%;
           right: 8%;
           text-align: right;
         }
 
         .hero-text-box h1 {
-          color: #06163A;
+          color: white; /* WHITE FOR VISIBILITY ON BOXED IMAGE */
           font-weight: 800;
-          font-size: 4rem;
+          font-size: 3rem;
           line-height: 1.1;
           letter-spacing: -0.01em;
-          animation: fadeInRight 1s ease-out;
+          text-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
 
         @keyframes fadeInLeft {
@@ -293,14 +307,14 @@ const Login = () => {
           to { opacity: 1; transform: translateX(0); }
         }
 
-        @keyframes fadeInRight {
-          from { opacity: 0; transform: translateX(20px); }
-          to { opacity: 1; transform: translateX(0); }
+        @keyframes fadeInScale {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
         }
 
         @media (max-width: 992px) {
           .left-panel { flex: 1; }
-          .right-panel { display: none; }
+          .right-panel-contained { display: none; }
         }
       `}</style>
     </div>
