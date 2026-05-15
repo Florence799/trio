@@ -4,7 +4,7 @@ import axios from 'axios';
 import { API_BASE } from '../config';
 
 // Import official assets
-import campusBg from '../assets/collegeimg.png';
+import campusBg from '../assets/lms.jpeg';
 import logoImg from '../assets/logo.jpeg';
 
 const Login = () => {
