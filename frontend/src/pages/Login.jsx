@@ -121,16 +121,16 @@ const Login = () => {
                       </InputAdornment>
                     ),
                     sx: { 
-                      color: 'white', 
-                      bgcolor: 'rgba(255,255,255,0.1)',
-                      borderRadius: '12px',
+                      color: '#06163A', 
+                      bgcolor: 'white',
+                      borderRadius: '8px',
                       '& fieldset': { border: 'none' },
-                      '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' }
+                      '& input::placeholder': { color: '#94A3B8', opacity: 1 }
                     }
                   }
                 }}
               />
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', mt: 1, display: 'block', ml: 1 }}>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', mt: 0.5, display: 'block', ml: 1, fontWeight: 600 }}>
                 Email
               </Typography>
             </Box>
@@ -148,27 +148,27 @@ const Login = () => {
                   input: {
                     startAdornment: (
                       <InputAdornment position="start">
-                        <Lock sx={{ color: 'rgba(255,255,255,0.7)' }} />
+                        <Lock sx={{ color: '#64748B' }} />
                       </InputAdornment>
                     ),
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" sx={{ color: 'rgba(255,255,255,0.7)' }}>
+                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" sx={{ color: '#64748B' }}>
                           {showPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       </InputAdornment>
                     ),
                     sx: { 
-                      color: 'white', 
-                      bgcolor: 'rgba(255,255,255,0.1)',
-                      borderRadius: '12px',
+                      color: '#06163A', 
+                      bgcolor: 'white',
+                      borderRadius: '8px',
                       '& fieldset': { border: 'none' },
-                      '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' }
+                      '& input::placeholder': { color: '#94A3B8', opacity: 1 }
                     }
                   }
                 }}
               />
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', mt: 1, display: 'block', ml: 1 }}>
+              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', mt: 0.5, display: 'block', ml: 1, fontWeight: 600 }}>
                 Password
               </Typography>
             </Box>
@@ -210,8 +210,7 @@ const Login = () => {
         position: 'relative',
         display: isMobile ? 'none' : 'flex',
         alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingRight: '10%',
+        justifyContent: 'center', // Center vertically
         backgroundImage: 'url(/assets/campus_bg.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -219,18 +218,25 @@ const Login = () => {
           content: '""',
           position: 'absolute',
           inset: 0,
-          background: 'linear-gradient(90deg, #06163A 0%, transparent 100%)',
-          opacity: 0.3
+          background: 'rgba(255, 255, 255, 0.1)',
         }
       }}>
-        <Box sx={{ position: 'relative', zIndex: 1, textAlign: 'right', animation: 'fadeInRight 1s ease-out' }}>
+        <Box sx={{ 
+          position: 'absolute',
+          top: '25%',
+          right: '8%',
+          zIndex: 1, 
+          textAlign: 'right', 
+          animation: 'fadeInRight 1s ease-out' 
+        }}>
           <Typography variant="h1" sx={{ 
-            color: '#06163A', 
-            fontWeight: 900, 
-            fontSize: '3.5rem', 
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-            maxWidth: '500px'
+            color: '#0D1B3E', 
+            fontWeight: 800, 
+            fontSize: { md: '3.5rem', lg: '4.5rem' }, 
+            lineHeight: 1,
+            letterSpacing: '-0.01em',
+            maxWidth: '600px',
+            fontFamily: "'Poppins', sans-serif"
           }}>
             Learning and <br /> Academic Support
           </Typography>
@@ -249,8 +255,10 @@ const Login = () => {
         .wave-pattern-overlay {
           position: absolute;
           inset: 0;
-          background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 86c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm66 3c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-46-4c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm20-46c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM21 39c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm65 31c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM82 34c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM56 8c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM12 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm75 21c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM29 13c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-          opacity: 0.3;
+          background: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+          background-size: 24px 24px;
+          background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 2px, transparent 2px, transparent 10px);
+          opacity: 0.8;
         }
       `}</style>
     </Box>
