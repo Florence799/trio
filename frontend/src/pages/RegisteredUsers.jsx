@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Alert, Spinner, Card, Form, Row, Col, Badge } from 'react-bootstrap';
-import { Typography, Box, MenuItem, TextField, Tabs, Tab } from '@mui/material';
+import { Container, Alert, Spinner, Card, Form, Row, Col, Badge, Modal, Button as BsButton } from 'react-bootstrap';
+import { Typography, Box, MenuItem, TextField, Tabs, Tab, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import { API_BASE } from '../config';
 
@@ -13,6 +15,13 @@ const RegisteredUsers = () => {
   const [selectedCourseId, setSelectedCourseId] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  // Registration Modal State
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newUser, setNewUser] = useState({
+    name: '', email: '', password: 'User@123', role: 'Student',
+    registeredNumber: '', department: '', year: '1st Year', section: 'A', mobile: ''
+  });
 
   const user = JSON.parse(localStorage.getItem('user'));
   const token = localStorage.getItem('token');
@@ -25,12 +34,10 @@ const RegisteredUsers = () => {
     setError('');
     try {
       if (isAdmin) {
-        // Admin fetches global lists
         const roleFilter = activeTab === 'Students' ? 'Student' : 'Faculty';
         const response = await axios.get(`${API_BASE}/api/auth/users?role=${roleFilter}`, { headers });
         setUsers(response.data);
       } else {
-        // Faculty fetches course-specific students
         const coursesResponse = await axios.get(`${API_BASE}/api/courses`, { headers });
         setCourses(coursesResponse.data);
         if (coursesResponse.data.length && !selectedCourseId) {
@@ -61,6 +68,24 @@ const RegisteredUsers = () => {
     fetchData();
   }, [activeTab, isAdmin]);
 
+  const handleAddUser = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(`${API_BASE}/api/auth/register`, {
+        ...newUser,
+        role: activeTab === 'Students' ? 'Student' : 'Faculty'
+      });
+      setShowAddModal(false);
+      setNewUser({
+        name: '', email: '', password: 'User@123', role: 'Student',
+        registeredNumber: '', department: '', year: '1st Year', section: 'A', mobile: ''
+      });
+      fetchData();
+    } catch (err) {
+      setError(err.response?.data?.error || 'Registration failed');
+    }
+  };
+
   const updateYear = async (userId, year) => {
     try {
       await axios.patch(`${API_BASE}/api/auth/students/${userId}/year`, { year }, { headers });
@@ -74,12 +99,23 @@ const RegisteredUsers = () => {
 
   return (
     <Container className="mt-4 pb-5">
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4" sx={{ fontWeight: 800, color: '#0f172a' }}>
-          Registered Users
-        </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: 2 }}>
+        <Box>
+          <Typography variant="h4" sx={{ fontWeight: 800, color: '#0f172a' }}>
+            Registered Users
+          </Typography>
+          {isAdmin && (
+            <Badge bg="primary" className="px-3 py-1 mt-1">Admin Management</Badge>
+          )}
+        </Box>
         {isAdmin && (
-          <Badge bg="primary" className="px-3 py-2">Admin View</Badge>
+          <BsButton 
+            variant="primary" 
+            onClick={() => setShowAddModal(true)}
+            className="d-flex align-items-center gap-2 rounded-pill px-4"
+          >
+            <AddIcon /> Register {activeTab === 'Students' ? 'Student' : 'Faculty'}
+          </BsButton>
         )}
       </Box>
 
@@ -133,7 +169,7 @@ const RegisteredUsers = () => {
                   <Box>
                     <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>{u.name}</Typography>
                     <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 600, mb: 1 }}>
-                      {u.role === 'Student' ? u.registeredNumber : `ID: ${u.registeredNumber}`}
+                      {u.role === 'Student' ? u.registeredNumber : `Faculty ID: ${u.registeredNumber}`}
                     </Typography>
                     <div className="small text-muted mb-2">
                       <i className="bi bi-envelope me-2"></i>{u.email}<br />
@@ -172,6 +208,81 @@ const RegisteredUsers = () => {
           </Col>
         ))}
       </Row>
+
+      {/* Registration Modal */}
+      <Modal show={showAddModal} onHide={() => setShowAddModal(false)} centered size="lg">
+        <Modal.Header closeButton className="border-0">
+          <Modal.Title className="fw-bold">
+            Register New {activeTab === 'Students' ? 'Student' : 'Faculty'}
+          </Modal.Title>
+        </Modal.Header>
+        <Form onSubmit={handleAddUser}>
+          <Modal.Body>
+            <Row className="g-3">
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Full Name</Form.Label>
+                  <Form.Control type="text" required value={newUser.name} onChange={(e) => setNewUser({...newUser, name: e.target.value})} />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Email Address</Form.Label>
+                  <Form.Control type="email" required value={newUser.email} onChange={(e) => setNewUser({...newUser, email: e.target.value})} />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>{activeTab === 'Students' ? 'Registered Number' : 'Faculty ID'}</Form.Label>
+                  <Form.Control type="text" required value={newUser.registeredNumber} onChange={(e) => setNewUser({...newUser, registeredNumber: e.target.value})} />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Mobile Number</Form.Label>
+                  <Form.Control type="text" required value={newUser.mobile} onChange={(e) => setNewUser({...newUser, mobile: e.target.value})} />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Department</Form.Label>
+                  <Form.Select required value={newUser.department} onChange={(e) => setNewUser({...newUser, department: e.target.value})}>
+                    <option value="">Select Dept</option>
+                    {['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL', 'IT'].map(d => <option key={d} value={d}>{d}</option>)}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              {activeTab === 'Students' && (
+                <>
+                  <Col md={3}>
+                    <Form.Group>
+                      <Form.Label>Year</Form.Label>
+                      <Form.Select value={newUser.year} onChange={(e) => setNewUser({...newUser, year: e.target.value})}>
+                        {YEAR_OPTIONS.map(y => <option key={y} value={y}>{y}</option>)}
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                  <Col md={3}>
+                    <Form.Group>
+                      <Form.Label>Section</Form.Label>
+                      <Form.Control type="text" value={newUser.section} onChange={(e) => setNewUser({...newUser, section: e.target.value})} />
+                    </Form.Group>
+                  </Col>
+                </>
+              )}
+              <Col md={12}>
+                <Alert variant="info" className="py-2 mb-0">
+                  <small>Default password is set to: <strong>User@123</strong>. The user can change this after their first login.</small>
+                </Alert>
+              </Col>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer className="border-0">
+            <BsButton variant="light" onClick={() => setShowAddModal(false)}>Cancel</BsButton>
+            <BsButton variant="primary" type="submit" className="px-4">Confirm Registration</BsButton>
+          </Modal.Footer>
+        </Form>
+      </Modal>
     </Container>
   );
 };
