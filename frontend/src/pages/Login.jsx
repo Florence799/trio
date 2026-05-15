@@ -43,8 +43,8 @@ const Login = () => {
         <div className="branding">
           <img src={logoImg} alt="SCET Logo" className="logo-img" />
           <div className="college-info">
-            <h6 className="college-name">SWARNANDHRA</h6>
-            <p className="college-dept">COLLEGE OF ENGINEERING</p>
+            <h6 className="college-name">SCET</h6>
+            <p className="college-dept">LMS Portal</p>
           </div>
         </div>
 
