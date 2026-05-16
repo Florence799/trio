@@ -86,9 +86,9 @@ const QuizzesPage = () => {
                   <Button
                     variant="contained"
                     sx={{ borderRadius: '10px', textTransform: 'none', fontWeight: 600 }}
-                    onClick={() => navigate(user.role === 'Student' ? `/quizzes/${item._id}` : (isAdmin ? `/quizzes/${item._id}/submissions` : `/courses/${item.course._id}`))}
+                    onClick={() => navigate(user.role === 'Student' ? (item.isCompleted ? `/quiz-review/${item.resultId}` : `/quizzes/${item._id}`) : (isAdmin ? `/quizzes/${item._id}/submissions` : `/courses/${item.course._id}`))}
                   >
-                    {user.role === 'Student' ? 'Start Quiz' : 'View Submissions'}
+                    {user.role === 'Student' ? (item.isCompleted ? 'View Result' : 'Start Quiz') : 'View Submissions'}
                   </Button>
                 </Box>
               </Card.Body>

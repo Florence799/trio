@@ -56,9 +56,10 @@ const QuizView = () => {
     setSubmitted(true);
     try {
       const token = localStorage.getItem('token');
+      const answersArray = quiz.questions.map((_, index) => answers[index] || null);
       const response = await axios.post(`${API_BASE}/api/quizzes/submit`, {
         quizId,
-        answers: Object.values(answers)
+        answers: answersArray
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });

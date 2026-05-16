@@ -13,7 +13,8 @@ const FeedbackAnalysis = () => {
     const fetchFeedback = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_BASE}/api/feedback/teacher/${user?.id}`, {
+        const teacherId = user?._id || user?.id;
+        const response = await axios.get(`${API_BASE}/api/feedback/teacher/${teacherId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setFeedbacks(response.data);
@@ -23,12 +24,13 @@ const FeedbackAnalysis = () => {
         setLoading(false);
       }
     };
-    if (user?.id) {
+    const tid = user?._id || user?.id;
+    if (tid) {
       fetchFeedback();
     } else {
       setLoading(false);
     }
-  }, [user?.id]);
+  }, [user?._id, user?.id]);
 
   if (loading) return <Container className="text-center py-5"><Spinner animation="border" /></Container>;
 
