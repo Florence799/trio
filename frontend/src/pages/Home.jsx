@@ -192,7 +192,7 @@ const Home = () => {
             Portal Purpose
           </Typography>
           <Typography variant="h3" sx={{ color: 'white', fontWeight: 800, mb: 4, letterSpacing: '-0.02em' }}>
-            Why choose LMS Pro?
+            Why choose SCET LMS Portal?
           </Typography>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={4}>
             <Box sx={{ flex: 1, p: 3, borderRadius: 4, bgcolor: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}>

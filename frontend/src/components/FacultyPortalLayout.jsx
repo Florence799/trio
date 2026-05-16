@@ -246,7 +246,7 @@ export default function FacultyPortalLayout() {
       </Box>
       <Box sx={{ position: 'relative', zIndex: 1, p: 2, pt: 1 }}>
         <Typography variant="caption" sx={{ color: alpha('#fff', 0.35), display: 'block', textAlign: 'center' }}>
-          LMS Pro · model workspace
+          SCET LMS Portal · model workspace
         </Typography>
       </Box>
     </Box>
