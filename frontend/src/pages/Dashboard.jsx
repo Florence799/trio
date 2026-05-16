@@ -36,8 +36,8 @@ const Dashboard = () => {
         
         const [courseRes, statsRes, announceRes] = await Promise.all([
           axios.get(`${API_BASE}/api/courses`, { headers }),
-          axios.get(`${API_BASE}/api/auth/stats`, { headers }),
-          axios.get(`${API_BASE}/api/announcements`, { headers })
+          axios.get(`${API_BASE}/api/auth/stats`, { headers }).catch(() => ({ data: { totalUsers: 0 } })),
+          axios.get(`${API_BASE}/api/announcements`, { headers }).catch(() => ({ data: [] }))
         ]);
 
         const assignmentResponses = await Promise.all(
